@@ -1,16 +1,20 @@
 package com.ggj2016.gregsbadday;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 /**
  * Created by Sami on 1/29/16.
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.body) Button bodyButton;
     @Bind(R.id.right_leg) Button rightLegButton;
     @Bind(R.id.left_leg) Button leftLegButton;
+    @Bind(R.id.pin) ImageView pin;
     private boolean isGood;
 
 
@@ -39,6 +44,46 @@ public class MainActivity extends AppCompatActivity {
         bodyButton.setTag(Region.BODY);
         rightLegButton.setTag(Region.RIGHT_LEG);
         leftLegButton.setTag(Region.LEFT_LEG);
+        pin.setOnTouchListener(new View.OnTouchListener() {
+            float deltaX;
+            float deltaY;
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                float x = event.getX();
+                float y = event.getY();
+                Rect pinRect = new Rect();
+                pin.getGlobalVisibleRect(pinRect);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        deltaX = pin.getX();
+                        deltaY = pin.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        float moveX = x + deltaX - pin.getWidth()/2;
+                        float moveY = y + deltaY - pin.getHeight()/2;
+                        pin.setX(moveX);
+                        pin.setY(moveY);
+                        pin.invalidate();
+//                        pin.animate()
+//                                .x(x + deltaX)
+//                                .y(y + deltaY)
+//                                .setDuration(0)
+//                                .start();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Timber.d("X: %d, Y: %d", (int)pin.getX(), (int)pin.getY());
+                        break;
+                    default:
+                        return false;
+
+
+
+
+
+                }
+                return true;
+            }
+        });
     }
 
     @OnCheckedChanged (R.id.good_evil)
@@ -94,4 +139,21 @@ public class MainActivity extends AppCompatActivity {
         LEFT_LEG,
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        Rect pinRect = new Rect();
+        pin.getGlobalVisibleRect(pinRect);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+
+
+
+        }
+
+
+        return true;
+
+    }
 }
