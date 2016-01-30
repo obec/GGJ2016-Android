@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Greg\'s bad day</string>
+    <string name="button_head">Head</string>
+    <string name="button_left_hand">Left Hand</string>
+    <string name="button_right_hand">Right Hand</string>
+    <string name="button_body">Body</string>
+    <string name="button_right_leg">Right Leg</string>
+    <string name="button_left_leg">Left Leg</string>
 </resources>
+

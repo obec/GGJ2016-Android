@@ -1,8 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" android:text="hello world" />
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <Switch
+        android:id="@+id/good_evil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_head"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:id="@+id/left_hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_left_hand" />
+
+    <Button
+        android:id="@+id/right_hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_right_hand"
+        android:layout_gravity="right" />
+
+    <Button
+        android:id="@+id/body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_body"
+        android:layout_gravity="center_horizontal" />
+
+
+    <Button
+        android:id="@+id/right_leg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_right_leg"
+        android:layout_gravity="right" />
+
+    <Button
+        android:id="@+id/left_leg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_left_leg" />
+
+
 </LinearLayout>
