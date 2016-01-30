@@ -41,13 +41,19 @@ public class TraceView extends View {
 
     public TraceView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+
+        if (!isInEditMode()) {
+            init(context);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public TraceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
+
+        if (!isInEditMode()) {
+            init(context);
+        }
     }
 
     private void init(Context context) {
@@ -65,7 +71,7 @@ public class TraceView extends View {
         }
     }
 
-    public void clear() {
+    public void clearDrawing() {
         path.reset();
 
         invalidate();
@@ -85,7 +91,7 @@ public class TraceView extends View {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(x, y);
                 lastTouch.set(x, y);
-                particleSystem = new ParticleSystem(activity, 100, android.R.drawable.star_on, 800);
+                particleSystem = new ParticleSystem(activity, 100, R.drawable.star_white, 800);
                 particleSystem.setScaleRange(0.7f, 1.3f);
                 particleSystem.setSpeedRange(0.05f, 0.1f);
                 particleSystem.setRotationSpeedRange(90, 180);
