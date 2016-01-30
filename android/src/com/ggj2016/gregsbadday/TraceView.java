@@ -29,6 +29,7 @@ public class TraceView extends View {
     private final RectF dirtyRect = new RectF();
 
     private ParticleSystem particleSystem;
+    private Activity activity;
 
     public TraceView(Context context) {
         this(context, null);
@@ -58,7 +59,9 @@ public class TraceView extends View {
         paint.setStrokeWidth(STROKE_WIDTH);
 
         if (context instanceof Activity) {
-            particleSystem = new ParticleSystem((Activity) context, 100, android.R.drawable.star_on, 800);
+            activity = (Activity) context;
+        } else {
+            throw new IllegalStateException("try again with an activity context");
         }
     }
 
@@ -82,12 +85,12 @@ public class TraceView extends View {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(x, y);
                 lastTouch.set(x, y);
-
+                particleSystem = new ParticleSystem(activity, 100, android.R.drawable.star_on, 800);
                 particleSystem.setScaleRange(0.7f, 1.3f);
                 particleSystem.setSpeedRange(0.05f, 0.1f);
                 particleSystem.setRotationSpeedRange(90, 180);
                 particleSystem.setFadeOut(200, new AccelerateInterpolator());
-                particleSystem.emit((int) event.getX(), (int) event.getY(), 40);
+                particleSystem.emit((int) x, (int) y, 40);
                 return true;
             case MotionEvent.ACTION_UP:
                 particleSystem.stopEmitting();
@@ -104,7 +107,7 @@ public class TraceView extends View {
                 }
 
                 path.lineTo(x, y);
-                particleSystem.updateEmitPoint((int) event.getX(), (int) event.getY());
+                particleSystem.updateEmitPoint((int) x, (int) y);
                 break;
             default:
                 return false;
@@ -141,5 +144,4 @@ public class TraceView extends View {
         dirtyRect.top = Math.min(lastTouch.y, y);
         dirtyRect.bottom = Math.max(lastTouch.y, y);
     }
-
 }
