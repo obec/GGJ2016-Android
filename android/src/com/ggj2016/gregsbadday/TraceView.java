@@ -144,5 +144,4 @@ public class TraceView extends View {
         dirtyRect.top = Math.min(lastTouch.y, y);
         dirtyRect.bottom = Math.max(lastTouch.y, y);
     }
-
 }
