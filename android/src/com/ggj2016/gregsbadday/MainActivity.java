@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,39 +48,29 @@ public class MainActivity extends AppCompatActivity {
         pin.setOnTouchListener(new View.OnTouchListener() {
             float deltaX;
             float deltaY;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                float x = event.getX();
-                float y = event.getY();
-                Rect pinRect = new Rect();
-                pin.getGlobalVisibleRect(pinRect);
+                float x = event.getRawX();
+                float y = event.getRawY();
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        deltaX = pin.getX();
-                        deltaY = pin.getY();
+                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
+                        deltaX = x - lParams.leftMargin;
+                        deltaY = y - lParams.topMargin;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        float moveX = x + deltaX - pin.getWidth()/2;
-                        float moveY = y + deltaY - pin.getHeight()/2;
-                        pin.setX(moveX);
-                        pin.setY(moveY);
-                        pin.invalidate();
-//                        pin.animate()
-//                                .x(x + deltaX)
-//                                .y(y + deltaY)
-//                                .setDuration(0)
-//                                .start();
+                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
+                        layoutParams.leftMargin = (int) (x - deltaX);
+                        layoutParams.topMargin = (int) (y - deltaY);
+                        pin.setLayoutParams(layoutParams);
                         break;
                     case MotionEvent.ACTION_UP:
                         Timber.d("X: %d, Y: %d", (int)pin.getX(), (int)pin.getY());
                         break;
                     default:
                         return false;
-
-
-
-
-
                 }
                 return true;
             }
