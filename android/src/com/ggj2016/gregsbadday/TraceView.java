@@ -90,7 +90,7 @@ public class TraceView extends View {
                 particleSystem.setSpeedRange(0.05f, 0.1f);
                 particleSystem.setRotationSpeedRange(90, 180);
                 particleSystem.setFadeOut(200, new AccelerateInterpolator());
-                particleSystem.emit((int) event.getX(), (int) event.getY(), 40);
+                particleSystem.emit((int) x, (int) y, 40);
                 return true;
             case MotionEvent.ACTION_UP:
                 particleSystem.stopEmitting();
@@ -107,7 +107,7 @@ public class TraceView extends View {
                 }
 
                 path.lineTo(x, y);
-                particleSystem.updateEmitPoint((int) event.getX(), (int) event.getY());
+                particleSystem.updateEmitPoint((int) x, (int) y);
                 break;
             default:
                 return false;
