@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/puzzle_container"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@android:color/black"
+    android:orientation="vertical">
 
-    <View
-        android:id="@+id/center"
-        android:layout_width="300dp"
-        android:layout_height="280dp"
-        android:layout_centerInParent="true"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-    <View
-        android:layout_width="@dimen/touch_point"
-        android:layout_height="@dimen/touch_point"
-        android:layout_alignLeft="@id/center"
-        android:layout_alignTop="@id/center"
-        android:layout_marginLeft="30dp"
-        android:background="@android:color/darker_gray"/>
+        <View
+            android:id="@+id/point_one"
+            android:layout_width="@dimen/touch_point"
+            android:layout_height="@dimen/touch_point"
+            android:layout_gravity="left"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="90dp"
+            android:background="@android:color/darker_gray"/>
 
-    <View
-        android:layout_width="@dimen/touch_point"
-        android:layout_height="@dimen/touch_point"
-        android:layout_alignRight="@id/center"
-        android:layout_alignTop="@id/center"
-        android:layout_marginRight="30dp"
-        android:background="@android:color/darker_gray"/>
+        <View
+            android:id="@+id/point_two"
+            android:layout_width="@dimen/touch_point"
+            android:layout_height="@dimen/touch_point"
+            android:layout_gravity="left|bottom"
+            android:layout_marginLeft="50dp"
+            android:layout_marginBottom="160dp"
+            android:background="@android:color/darker_gray"/>
 
-    <View
-        android:layout_width="@dimen/touch_point"
-        android:layout_height="@dimen/touch_point"
-        android:layout_alignLeft="@id/center"
-        android:layout_alignBottom="@id/center"
-        android:layout_marginBottom="75dp"
-        android:layout_marginLeft="-20dp"
-        android:background="@android:color/darker_gray"/>
+        <View
+            android:id="@+id/point_three"
+            android:layout_width="@dimen/touch_point"
+            android:layout_height="@dimen/touch_point"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="50dp"
+            android:background="@android:color/darker_gray"/>
 
-    <View
-        android:layout_width="@dimen/touch_point"
-        android:layout_height="@dimen/touch_point"
-        android:layout_alignRight="@id/center"
-        android:layout_alignBottom="@id/center"
-        android:layout_marginBottom="75dp"
-        android:layout_marginRight="-20dp"
-        android:background="@android:color/darker_gray"/>
+        <View
+            android:id="@+id/point_four"
+            android:layout_width="@dimen/touch_point"
+            android:layout_height="@dimen/touch_point"
+            android:layout_gravity="right|bottom"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="160dp"
+            android:background="@android:color/darker_gray"/>
 
-    <View
-        android:layout_width="@dimen/touch_point"
-        android:layout_height="@dimen/touch_point"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/center"
-        android:background="@android:color/darker_gray"/>
+        <View
+            android:id="@+id/point_five"
+            android:layout_width="@dimen/touch_point"
+            android:layout_height="@dimen/touch_point"
+            android:layout_gravity="right"
+            android:layout_marginRight="80dp"
+            android:layout_marginTop="90dp"
+            android:background="@android:color/darker_gray"/>
+
+        <com.ggj2016.gregsbadday.TraceView
+            android:id="@+id/trace_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
 
     <Button
-        style="@style/Base.Widget.AppCompat.Button"
         android:id="@+id/clear_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:text="@string/clear_button_text"/>
 
-    <com.ggj2016.gregsbadday.TraceView
-        android:id="@+id/trace_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/clear_button"/>
-
-</RelativeLayout>
+</LinearLayout>
