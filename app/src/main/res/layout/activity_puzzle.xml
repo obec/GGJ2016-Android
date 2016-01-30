@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ggj2016.com.gregsbadday.TraceView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ff00ff"/>
+
+    <!--<View-->
+        <!--android:id="@+id/center"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="280dp"-->
+        <!--android:layout_centerInParent="true"/>-->
+
+    <!--<View-->
+        <!--android:layout_width="@dimen/touch_point"-->
+        <!--android:layout_height="@dimen/touch_point"-->
+        <!--android:layout_alignLeft="@id/center"-->
+        <!--android:layout_alignTop="@id/center"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:background="#FF00FF"/>-->
+
+    <!--<View-->
+        <!--android:layout_width="@dimen/touch_point"-->
+        <!--android:layout_height="@dimen/touch_point"-->
+        <!--android:layout_alignRight="@id/center"-->
+        <!--android:layout_alignTop="@id/center"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:background="#FF00FF"/>-->
+
+    <!--<View-->
+        <!--android:layout_width="@dimen/touch_point"-->
+        <!--android:layout_height="@dimen/touch_point"-->
+        <!--android:layout_alignLeft="@id/center"-->
+        <!--android:layout_alignBottom="@id/center"-->
+        <!--android:layout_marginBottom="75dp"-->
+        <!--android:layout_marginLeft="-20dp"-->
+        <!--android:background="#FF00FF"/>-->
+
+    <!--<View-->
+        <!--android:layout_width="@dimen/touch_point"-->
+        <!--android:layout_height="@dimen/touch_point"-->
+        <!--android:layout_alignRight="@id/center"-->
+        <!--android:layout_alignBottom="@id/center"-->
+        <!--android:layout_marginBottom="75dp"-->
+        <!--android:layout_marginRight="-20dp"-->
+        <!--android:background="#FF00FF"/>-->
+
+    <!--<View-->
+        <!--android:layout_width="@dimen/touch_point"-->
+        <!--android:layout_height="@dimen/touch_point"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_below="@id/center"-->
+        <!--android:background="#FF00FF"/>-->
+
+</RelativeLayout>
