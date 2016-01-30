@@ -1,5 +1,6 @@
 package ggj2016.com.gregsbadday;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -72,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.open_sandbox)
+    protected void onOpenSandboxClicked(View view) {
+        Intent intent = new Intent(this, PuzzleSandbox.class);
+        startActivity(intent);
+    }
+
     private enum Region{
         HEAD,
         LEFT_HAND,
@@ -80,4 +87,5 @@ public class MainActivity extends AppCompatActivity {
         RIGHT_LEG,
         LEFT_LEG,
     }
+
 }

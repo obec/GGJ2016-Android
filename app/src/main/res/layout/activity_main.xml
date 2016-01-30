@@ -50,5 +50,11 @@
         android:layout_height="wrap_content"
         android:text="@string/button_left_leg" />
 
+    <Button
+        android:id="@+id/open_sandbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/open_sandbox"/>
 
 </LinearLayout>
