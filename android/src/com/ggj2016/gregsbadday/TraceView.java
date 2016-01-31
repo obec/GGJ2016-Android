@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -20,15 +19,30 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Toast;
 
 import com.plattysoft.leonids.ParticleSystem;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
 public class TraceView extends View {
 
+    private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
+    static {
+        map.put(Region.TEAL.color, Region.TEAL);
+        map.put(Region.YELLOW.color, Region.YELLOW);
+        map.put(Region.RED.color, Region.RED);
+        map.put(Region.PINK.color, Region.PINK);
+        map.put(Region.GREEN.color, Region.GREEN);
+    }
+
     private static final float STROKE_WIDTH = 5.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
+
+    private static final int POINTS = 5;
 
     private final Paint paint = new Paint();
     private final Path path = new Path();
@@ -39,8 +53,8 @@ public class TraceView extends View {
     private ParticleSystem particleSystem;
     private Activity activity;
 
-    Bitmap backgroundBitmap;
-    Drawable tintedBackgroundDrawable;
+    Bitmap backgroundMaskBitmap;
+    Drawable backgroundDrawable;
 
     private Point windowSize = new Point();
 
@@ -77,12 +91,10 @@ public class TraceView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
 
-        backgroundBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.alpha_test);
-        tintedBackgroundDrawable = getResources().getDrawable(R.drawable.alpha_test);
-        if (tintedBackgroundDrawable != null) {
-            tintedBackgroundDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
-            setBackground(tintedBackgroundDrawable);
+        backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.disruptcardmask);
+        backgroundDrawable = getResources().getDrawable(R.drawable.disruptcard);
+        if (backgroundDrawable != null) {
+            setBackground(backgroundDrawable);
         }
 
         if (context instanceof Activity) {
@@ -143,12 +155,16 @@ public class TraceView extends View {
 
                 float percentageX = Math.max(0, Math.min(0.999f, x / windowSize.x));
                 float percentageY = Math.max(0, Math.min(0.999f, y / windowSize.y));
-                float targetX = backgroundBitmap.getWidth() * percentageX;
-                float targetY = backgroundBitmap.getHeight() * percentageY;
-                int color = backgroundBitmap.getPixel((int)targetX, (int)targetY);
+                float targetX = backgroundMaskBitmap.getWidth() * percentageX;
+                float targetY = backgroundMaskBitmap.getHeight() * percentageY;
+                int color = backgroundMaskBitmap.getPixel((int)targetX, (int)targetY);
                 Timber.d("#%06X  %d", (0xFFFFFF & color), color);
 
                 //TODO COUNT DEM POINTS
+                Region pinnedRegion = map.get(color);
+                if (pinnedRegion != null) {
+                    Toast.makeText(activity, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
+                }
 
                 break;
             default:
@@ -164,6 +180,26 @@ public class TraceView extends View {
         lastTouch.set(x, y);
 
         return true;
+    }
+
+    private enum Region{
+        TEAL("Teal", -16712193),
+        YELLOW("Yellow", -1280),
+        RED("Red", -55808),
+        PINK("Pink", -48897),
+        GREEN("Green", -7407104);
+
+        int color;
+        String name;
+        Region(String name, int color) {
+            this.color = color;
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s #%06X  %d",name, (0xFFFFFF & color), color);
+        }
     }
 
     private void expandDirtyRect(float x, float y) {
