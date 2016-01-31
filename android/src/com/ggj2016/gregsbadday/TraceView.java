@@ -43,7 +43,7 @@ public class TraceView extends View {
     private static final float STROKE_WIDTH = 5.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
-    private static final int POINTS = 6;
+    private static final int POINTS = 5;
 
     private final Paint paint = new Paint();
     private final Path path = new Path();
@@ -54,12 +54,10 @@ public class TraceView extends View {
     private ParticleSystem particleSystem;
     private Activity activity;
 
-    Bitmap backgroundBitmap;
-    Drawable tintedBackgroundDrawable;
+    Bitmap backgroundMaskBitmap;
+    Drawable backgroundDrawable;
 
     private Point windowSize = new Point();
-
-    private int pointCount = 0;
 
     public TraceView(Context context) {
         this(context, null);
@@ -94,11 +92,10 @@ public class TraceView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
 
-        backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.temp_rune);
-        tintedBackgroundDrawable = getResources().getDrawable(R.drawable.temp_rune);
-        if (tintedBackgroundDrawable != null) {
-            //tintedBackgroundDrawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-            setBackground(tintedBackgroundDrawable);
+        backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.disruptcardmask);
+        backgroundDrawable = getResources().getDrawable(R.drawable.disruptcard);
+        if (backgroundDrawable != null) {
+            setBackground(backgroundDrawable);
         }
 
         if (context instanceof Activity) {
@@ -159,9 +156,9 @@ public class TraceView extends View {
 
                 float percentageX = Math.max(0, Math.min(0.999f, x / windowSize.x));
                 float percentageY = Math.max(0, Math.min(0.999f, y / windowSize.y));
-                float targetX = backgroundBitmap.getWidth() * percentageX;
-                float targetY = backgroundBitmap.getHeight() * percentageY;
-                int color = backgroundBitmap.getPixel((int)targetX, (int)targetY);
+                float targetX = backgroundMaskBitmap.getWidth() * percentageX;
+                float targetY = backgroundMaskBitmap.getHeight() * percentageY;
+                int color = backgroundMaskBitmap.getPixel((int)targetX, (int)targetY);
                 Timber.d("#%06X  %d", (0xFFFFFF & color), color);
 
                 //TODO COUNT DEM POINTS
