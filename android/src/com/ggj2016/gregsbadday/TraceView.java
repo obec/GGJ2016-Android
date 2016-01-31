@@ -120,7 +120,7 @@ public class TraceView extends View {
 
     public void clearDrawing() {
         path.reset();
-
+        particleSystem.cancel();
         invalidate();
     }
 
