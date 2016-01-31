@@ -31,8 +31,7 @@ public class NetworkManager {
     // Android doesn't like network operations in the UI thread.
     // This function acts a wrapper for the actual HTTP connection.
     // A new thread is created in this function for the Network Operations
-    public static void getServer(String urlStr)
-    {
+    public static void getServer(String urlStr) {
         final String url = urlStr;
         new Thread() {
             public void run() {
@@ -43,13 +42,11 @@ public class NetworkManager {
                     inputStream = getHttpConnection(url);
 
                     // Close the input stream if data was received
-                    if(inputStream != null) {
+                    if (inputStream != null) {
                         Log.d("Data", "Received");
                         inputStream.close();
                     }
-                }
-
-                catch (IOException e1) {
+                } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
@@ -57,8 +54,7 @@ public class NetworkManager {
     }
 
     // Wrapper for the post
-    public static void postServer(final PinMessage pinMessage, final Listener listener)
-    {;
+    public static void postServer(final PinMessage pinMessage, final Listener listener) {
         new Thread() {
             public void run() {
                 InputStream inputStream = null;
@@ -68,10 +64,10 @@ public class NetworkManager {
                     inputStream = postHttpConnection(BASE_ENDPOINT, pinMessage);
 
                     // Close the input stream if data was received
-                    if(inputStream != null) {
+                    if (inputStream != null) {
                         Log.d("Data", "Posted");
                         BufferedReader bufferedReader =
-                                new BufferedReader(new InputStreamReader(inputStream,"utf-8"));
+                                new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
 
                         GameStateMessage state = mGson.fromJson(bufferedReader, GameStateMessage.class);
                         listener.onSuccess(state);
@@ -122,7 +118,7 @@ public class NetworkManager {
     }
 
     // Function which does the work for "POST"
-    public static InputStream postHttpConnection(String urlStr, PinMessage pinMessage){
+    public static InputStream postHttpConnection(String urlStr, PinMessage pinMessage) {
         InputStream inputStream = null;
         int responseCode = -1;
 
