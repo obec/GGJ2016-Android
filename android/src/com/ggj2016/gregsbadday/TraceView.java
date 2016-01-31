@@ -11,6 +11,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -18,6 +19,8 @@ import android.view.animation.AccelerateInterpolator;
 import com.plattysoft.leonids.ParticleSystem;
 
 public class TraceView extends View {
+
+    private static final String TAG = TraceView.class.getSimpleName();
 
     private static final float STROKE_WIDTH = 5.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
@@ -30,6 +33,40 @@ public class TraceView extends View {
 
     private ParticleSystem particleSystem;
     private Activity activity;
+
+
+    private static final int rectWidth = 20;
+
+    private static final int pointOneLeft = 98;
+    private static final int pointOneRight = pointOneLeft + rectWidth;
+    private static final int pointOneTop = 210;
+    private static final int pointOneBottom = pointOneTop + rectWidth;
+
+    private static final int pointTwoLeft = 270;
+    private static final int pointTwoRight = pointTwoLeft + rectWidth;
+    private static final int pointTwoTop = 210;
+    private static final int pointTwoBottom = pointTwoTop + rectWidth;
+
+    private static final int pointThreeLeft = 421;
+    private static final int pointThreeRight = pointThreeLeft + rectWidth;
+    private static final int pointThreeTop = 210;
+    private static final int pointThreeBottom = pointThreeTop + rectWidth;
+
+    private static final int pointFourLeft = 270;
+    private static final int pointFourRight = pointFourLeft + rectWidth;
+    private static final int pointFourTop = 410;
+    private static final int pointFourBottom = pointFourTop + rectWidth;
+
+    private static final int pointFiveLeft = 270;
+    private static final int pointFiveRight = pointFiveLeft + rectWidth;
+    private static final int pointFiveTop = 620;
+    private static final int pointFiveBottom = pointFiveTop + rectWidth;
+
+    private RectF pointOneRect;
+    private RectF pointTwoRect;
+    private RectF pointThreeRect;
+    private RectF pointFourRect;
+    private RectF pointFiveRect;
 
     public TraceView(Context context) {
         this(context, null);
@@ -64,11 +101,21 @@ public class TraceView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
 
+        setupRects();
+
         if (context instanceof Activity) {
             activity = (Activity) context;
         } else {
             throw new IllegalStateException("try again with an activity context");
         }
+    }
+
+    private void setupRects() {
+        pointOneRect = new RectF(pointOneLeft, pointOneTop, pointOneRight, pointOneBottom);
+        pointTwoRect = new RectF(pointTwoLeft, pointTwoTop, pointTwoRight, pointTwoBottom);
+        pointThreeRect = new RectF(pointThreeLeft, pointThreeTop, pointThreeRight, pointThreeBottom);
+        pointFourRect = new RectF(pointFourLeft, pointFourTop, pointFourRight, pointFourBottom);
+        pointFiveRect = new RectF(pointFiveLeft, pointFiveTop, pointFiveRight, pointFiveBottom);
     }
 
     public void clearDrawing() {
@@ -80,6 +127,13 @@ public class TraceView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawPath(path, paint);
+
+        //draw points!
+        canvas.drawRect(pointOneRect, paint);
+        canvas.drawRect(pointTwoRect, paint);
+        canvas.drawRect(pointThreeRect, paint);
+        canvas.drawRect(pointFourRect, paint);
+        canvas.drawRect(pointFiveRect, paint);
     }
 
     @Override
@@ -114,6 +168,18 @@ public class TraceView extends View {
 
                 path.lineTo(x, y);
                 particleSystem.updateEmitPoint((int) x, (int) y);
+
+                if (dirtyRect.intersect(pointOneRect)) {
+                    Log.e(TAG, "Point One Intersected");
+                } else if (dirtyRect.intersect(pointTwoRect)) {
+                    Log.e(TAG, "Point Two Intersected");
+                } else if (dirtyRect.intersect(pointThreeRect)) {
+                    Log.e(TAG, "Point Three Intersected");
+                } else if (dirtyRect.intersect(pointFourRect)) {
+                    Log.e(TAG, "Point Four Intersected");
+                } else if (dirtyRect.intersect(pointFiveRect)) {
+                    Log.e(TAG, "Point Five Intersected");
+                }
                 break;
             default:
                 return false;
