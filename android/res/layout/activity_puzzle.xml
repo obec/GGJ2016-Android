@@ -13,6 +13,13 @@
         android:layout_alignParentBottom="true"
         android:text="@string/clear_button_text"/>
 
+    <ImageView
+        android:id="@+id/voodoo_scene"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/temp_rune"
+        android:layout_centerInParent="true"/>
+
     <com.ggj2016.gregsbadday.TraceView
         android:id="@+id/trace_view"
         android:layout_width="match_parent"
