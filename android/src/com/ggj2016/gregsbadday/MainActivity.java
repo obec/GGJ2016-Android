@@ -282,6 +282,9 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, PuzzleSandbox.class);
         intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, type);
+        long timeRemaining = ROUND_TIME - (System.currentTimeMillis() - mRoundStartTime);
+        Timber.d("Time remaining: %d", timeRemaining);
+        intent.putExtra(PuzzleSandbox.KEY_TIME_REMAINING, timeRemaining);
         startActivityForResult(intent, 0);
     }
 
@@ -295,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_TIME_UP) {
+            Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
             mRoundOver = true;
         }
     }
