@@ -2,12 +2,14 @@ package com.ggj2016.gregsbadday;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<View> viewList = new ArrayList();
     private boolean isGood;
+    private Point windowSize = new Point();
 
 
     @Override
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         viewList.add(testView);
         viewList.add(secondTestView);
         final Bitmap bitmap = ((BitmapDrawable)colorWheel.getDrawable()).getBitmap();
+        Display display = getWindowManager().getDefaultDisplay();
+        display.getSize(windowSize);
 
         pin.setOnTouchListener(new View.OnTouchListener() {
             float deltaX;
@@ -87,8 +92,12 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_UP:
                         PointF pinPoint = getPinPoint();
                         Timber.d("X: %d, Y: %d", (int) pinPoint.x, (int) pinPoint.y);
+                        float percentageX = pinPoint.x / windowSize.x;
+                        float percentageY = pinPoint.y/ windowSize.y;
+                        float targetX = bitmap.getWidth() * percentageX;
+                        float targetY = bitmap.getHeight() * percentageY;
 
-                        int color = bitmap.getPixel((int)pinPoint.x, (int)pinPoint.y);
+                        int color = bitmap.getPixel((int)targetX, (int)targetY);
                         Timber.d("#%06X", (0xFFFFFF & color));
                         for(View view: viewList) {
                             boolean pinOverView = isPinOverView(view, pinPoint);
