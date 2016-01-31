@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -368,21 +369,38 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
         mRoundOver = true;
         PinMessage message = preparePinMessage();
-        NetworkManager.postServer(message, new NetworkManager.Listener() {
-            @Override
-            public void onSuccess(GameStateMessage message) {
+        boolean internetConnection = checkInternetConnection();
+        if(internetConnection) {
+            NetworkManager.postServer(message, new NetworkManager.Listener() {
+                @Override
+                public void onSuccess(GameStateMessage message) {
+                    Timber.d("Success!");
+                }
 
-            }
-
-            @Override
-            public void onError() {
-
-            }
-        });
+                @Override
+                public void onError() {
+                    Timber.d("Failure.");
+                }
+            });
+        }
     }
 
     private long getTimeRemaining() {
         return ROUND_TIME - (System.currentTimeMillis() - mRoundStartTime);
+    }
+
+
+    private boolean checkInternetConnection() {
+        // get Connectivity Manager object to check connection
+        ConnectivityManager connection = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+        if (connection.getActiveNetworkInfo() != null) {
+            Toast.makeText(this, " Connected ", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
+            return false;
+        }
     }
 
 }
