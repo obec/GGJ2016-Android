@@ -79,14 +79,16 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="#FF0000"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/second_test_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="#FF0000"
-        android:layout_below="@id/right_leg"/>
+        android:layout_below="@id/right_leg"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/open_libgdx_sandbox"
@@ -98,10 +100,17 @@
         android:layout_centerHorizontal="true"/>
 
     <ImageView
-        android:id="@+id/color_wheel"
+        android:id="@+id/voodoo_target_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/color_wheel"
+        android:src="@drawable/voodoo_target_map"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:id="@+id/voodoo_scene"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/voodoo_scene"
         android:layout_centerInParent="true"/>
 
 

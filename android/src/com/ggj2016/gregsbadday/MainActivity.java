@@ -18,7 +18,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,7 +44,17 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.pin) ImageView pin;
     @Bind(R.id.test_view) View testView;
     @Bind(R.id.second_test_view) View secondTestView;
-    @Bind(R.id.color_wheel) ImageView colorWheel;
+    @Bind(R.id.voodoo_target_map) ImageView colorWheel;
+
+    private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
+    static {
+        map.put(Region.HEAD.color, Region.HEAD);
+        map.put(Region.BODY.color, Region.BODY);
+        map.put(Region.LEFT_HAND.color, Region.LEFT_HAND);
+        map.put(Region.RIGHT_HAND.color, Region.RIGHT_HAND);
+        map.put(Region.LEFT_LEG.color, Region.LEFT_LEG);
+        map.put(Region.RIGHT_LEG.color, Region.RIGHT_LEG);
+    }
 
 
 
@@ -98,11 +110,15 @@ public class MainActivity extends AppCompatActivity {
                         float targetY = bitmap.getHeight() * percentageY;
 
                         int color = bitmap.getPixel((int)targetX, (int)targetY);
-                        Timber.d("#%06X", (0xFFFFFF & color));
-                        for(View view: viewList) {
-                            boolean pinOverView = isPinOverView(view, pinPoint);
-                            Timber.d("Is the pin over the view? %b", pinOverView);
-                            Toast.makeText(MainActivity.this, "Is pin over view? " + pinOverView, Toast.LENGTH_SHORT).show();
+                        Timber.d("#%06X  %d", (0xFFFFFF & color), color);
+//                        for(View view: viewList) {
+//                            boolean pinOverView = isPinOverView(view, pinPoint);
+//                            Timber.d("Is the pin over the view? %b", pinOverView);
+//                            Toast.makeText(MainActivity.this, "Is pin over view? " + pinOverView, Toast.LENGTH_SHORT).show();
+//                        }
+                        Region pinnedRegion = map.get(color);
+                        if (pinnedRegion != null) {
+                            Toast.makeText(MainActivity.this, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
                         }
 
                         break;
@@ -179,12 +195,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private enum Region{
-        HEAD,
-        LEFT_HAND,
-        RIGHT_HAND,
-        BODY,
-        RIGHT_LEG,
-        LEFT_LEG,
+        HEAD("Head", -9219073),
+        LEFT_HAND("Left hand", -14287090),
+        RIGHT_HAND("Right hand", -130301),
+        BODY("Body", -15840001),
+        RIGHT_LEG("Right leg",-14066),
+        LEFT_LEG("Left leg", -61711);
+
+        int color;
+        String name;
+        Region(String name, int color) {
+            this.color = color;
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s #%06X  %d",name, (0xFFFFFF & color), color);
+        }
+
     }
 
     @Override
