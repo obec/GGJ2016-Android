@@ -189,12 +189,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    @OnClick(R.id.open_libgdx_sandbox)
-    protected void onOpenLibGdxSandbox(View view) {
-        Intent intent = new Intent(this, AndroidLauncher.class);
-        startActivity(intent);
-    }
-
     private enum Region{
         HEAD("Head", -9219073),
         LEFT_HAND("Left hand", -14287090),
