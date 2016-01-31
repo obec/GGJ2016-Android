@@ -32,12 +32,11 @@ public class TraceView extends View {
 
     private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
     static {
-        map.put(Region.ONE.color, Region.ONE);
-        map.put(Region.TWO.color, Region.TWO);
-        map.put(Region.THREE.color, Region.THREE);
-        map.put(Region.FOUR.color, Region.FOUR);
-        map.put(Region.FIVE.color, Region.FIVE);
-        map.put(Region.SIX.color, Region.SIX);
+        map.put(Region.TEAL.color, Region.TEAL);
+        map.put(Region.YELLOW.color, Region.YELLOW);
+        map.put(Region.RED.color, Region.RED);
+        map.put(Region.PINK.color, Region.PINK);
+        map.put(Region.GREEN.color, Region.GREEN);
     }
 
     private static final float STROKE_WIDTH = 5.0f;
@@ -184,12 +183,11 @@ public class TraceView extends View {
     }
 
     private enum Region{
-        ONE("One", -9219073),
-        TWO("Two", -14287090),
-        THREE("Three", -130301),
-        FOUR("Four", -15840001),
-        FIVE("Five",-14066),
-        SIX("Six", -61711);
+        TEAL("Teal", -16712193),
+        YELLOW("Yellow", -1280),
+        RED("Red", -55808),
+        PINK("Pink", -48897),
+        GREEN("Green", -7407104);
 
         int color;
         String name;
@@ -202,7 +200,6 @@ public class TraceView extends View {
         public String toString() {
             return String.format("%s #%06X  %d",name, (0xFFFFFF & color), color);
         }
-
     }
 
     private void expandDirtyRect(float x, float y) {
