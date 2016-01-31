@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     int runeCardIndex = 0;
 
     private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
+
     static {
         map.put(Region.HEAD.color, Region.HEAD);
         map.put(Region.BODY.color, Region.BODY);
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         leftLegButton.setTag(Region.LEFT_LEG);
         viewList.add(testView);
         viewList.add(secondTestView);
-        final Bitmap bitmap = ((BitmapDrawable)colorWheel.getDrawable()).getBitmap();
+        final Bitmap bitmap = ((BitmapDrawable) colorWheel.getDrawable()).getBitmap();
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(windowSize);
 
@@ -119,11 +120,11 @@ public class MainActivity extends AppCompatActivity {
                         PointF pinPoint = getPinPoint();
                         Timber.d("X: %d, Y: %d", (int) pinPoint.x, (int) pinPoint.y);
                         float percentageX = pinPoint.x / windowSize.x;
-                        float percentageY = pinPoint.y/ windowSize.y;
+                        float percentageY = pinPoint.y / windowSize.y;
                         float targetX = bitmap.getWidth() * percentageX;
                         float targetY = bitmap.getHeight() * percentageY;
 
-                        int color = bitmap.getPixel((int)targetX, (int)targetY);
+                        int color = bitmap.getPixel((int) targetX, (int) targetY);
                         Timber.d("#%06X  %d", (0xFFFFFF & color), color);
 //                        for(View view: viewList) {
 //                            boolean pinOverView = isPinOverView(view, pinPoint);
@@ -149,18 +150,18 @@ public class MainActivity extends AppCompatActivity {
         showRune();
     }
 
-    private boolean isPinOverView(View view, PointF pointF){
+    private boolean isPinOverView(View view, PointF pointF) {
         PointF pinPoint = getPinPoint();
         if (((pinPoint.x > view.getLeft()) && (pinPoint.x < view.getRight())) &&
-                ((pinPoint.y < view.getBottom()) && (pinPoint.y > view.getTop()))){
+                ((pinPoint.y < view.getBottom()) && (pinPoint.y > view.getTop()))) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
 
     }
-    private PointF getPinPoint(){
+
+    private PointF getPinPoint() {
         return new PointF(pin.getX(), pin.getY() + pin.getHeight());
     }
 
@@ -180,13 +181,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnCheckedChanged (R.id.good_evil)
-    protected void onGoodEvilChanged(boolean checked){
+    @OnCheckedChanged(R.id.good_evil)
+    protected void onGoodEvilChanged(boolean checked) {
         isGood = checked;
     }
 
     @OnClick({R.id.head, R.id.left_hand, R.id.right_hand, R.id.body, R.id.right_leg, R.id.left_leg})
-    protected void onRegionClicked(View view){
+    protected void onRegionClicked(View view) {
         Log.d(TAG, String.format("Am I good? %b", isGood));
         Region region = (Region) view.getTag();
         switch (region) {
@@ -212,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick( {R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love })
-         protected void onOpenSandboxClicked(View view) {
+    @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
+    protected void onOpenSandboxClicked(View view) {
         Intent intent = new Intent(this, PuzzleSandbox.class);
 
         switch (view.getId()) {
@@ -234,16 +235,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private enum Region{
+    private enum Region {
         HEAD("Head", -9219073),
         LEFT_HAND("Left hand", -14287090),
         RIGHT_HAND("Right hand", -130301),
         BODY("Body", -15840001),
-        RIGHT_LEG("Right leg",-14066),
+        RIGHT_LEG("Right leg", -14066),
         LEFT_LEG("Left leg", -61711);
 
         int color;
         String name;
+
         Region(String name, int color) {
             this.color = color;
             this.name = name;
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public String toString() {
-            return String.format("%s #%06X  %d",name, (0xFFFFFF & color), color);
+            return String.format("%s #%06X  %d", name, (0xFFFFFF & color), color);
         }
 
     }
@@ -273,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showRune() {
+        mHandler.removeCallbacksAndMessages(mRoundOverRunnable);
         TraceView.CardType type = runeCards[runeCardIndex];
         runeCardIndex++;
 
@@ -282,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, PuzzleSandbox.class);
         intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, type);
-        long timeRemaining = ROUND_TIME - (System.currentTimeMillis() - mRoundStartTime);
+        long timeRemaining = getTimeRemaining();
         Timber.d("Time remaining: %d", timeRemaining);
         intent.putExtra(PuzzleSandbox.KEY_TIME_REMAINING, timeRemaining);
         startActivityForResult(intent, 0);
@@ -298,8 +301,25 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_TIME_UP) {
-            Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
-            mRoundOver = true;
+            roundOver();
+        } else {
+            mHandler.postDelayed(mRoundOverRunnable, getTimeRemaining());
         }
+    }
+
+    private Runnable mRoundOverRunnable = new Runnable() {
+        @Override
+        public void run() {
+            roundOver();
+        }
+    };
+
+    private void roundOver() {
+        Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
+        mRoundOver = true;
+    }
+
+    private long getTimeRemaining() {
+        return ROUND_TIME - (System.currentTimeMillis() - mRoundStartTime);
     }
 }
