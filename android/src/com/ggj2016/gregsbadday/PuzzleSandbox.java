@@ -1,8 +1,10 @@
 package com.ggj2016.gregsbadday;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.Toast;
 
 import com.ggj2016.gregsbadday.messages.GameStateMessage;
 import com.ggj2016.gregsbadday.messages.PinMessage;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,11 +24,13 @@ public class PuzzleSandbox extends AppCompatActivity {
 
     public static final String KEY_TIME_REMAINING = "remaining";
     public static final String KEY_CARD_TYPE = "type";
+    private Handler mHandler = new Handler();
 
     public static final int RESULT_RUNE_COMPLETE = 0;
     public static final int RESULT_TIME_UP = 1;
 
     private Bitmap bitmap = null;
+    private long mTimeRemaining;
 
     @Bind(R.id.trace_view) TraceView traceView;
 
@@ -34,7 +40,9 @@ public class PuzzleSandbox extends AppCompatActivity {
         setContentView(R.layout.activity_puzzle);
         ButterKnife.bind(this);
 
-        TraceView.CardType cardType = (TraceView.CardType) getIntent().getSerializableExtra(KEY_CARD_TYPE);
+        Intent intent = getIntent();
+        TraceView.CardType cardType = (TraceView.CardType) intent.getSerializableExtra(KEY_CARD_TYPE);
+        mTimeRemaining = intent.getLongExtra(KEY_TIME_REMAINING, TimeUnit.SECONDS.toMillis(7));
         traceView.setCardType(cardType);
 
         // Variable for checking the connection status
@@ -56,6 +64,18 @@ public class PuzzleSandbox extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setResult(MainActivity.RESULT_TIME_UP);
+                finish();
+            }
+        }, mTimeRemaining);
     }
 
     // Function to check the connection with the server
