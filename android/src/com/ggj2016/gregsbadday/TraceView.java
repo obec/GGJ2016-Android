@@ -151,9 +151,10 @@ public class TraceView extends View {
                 particleSystem.setRotationSpeedRange(90, 180);
                 particleSystem.setFadeOut(200, new AccelerateInterpolator());
                 particleSystem.emit((int) x, (int) y, 40);
-                return true;
+                break;
             case MotionEvent.ACTION_UP:
                 particleSystem.stopEmitting();
+                break;
             case MotionEvent.ACTION_MOVE:
                 resetDirtyRect(x, y);
 
