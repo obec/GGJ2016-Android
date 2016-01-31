@@ -66,10 +66,10 @@ public class PuzzleSandbox extends AppCompatActivity {
             networkInfo = connection.getNetworkInfo(mNetwork);
 
             if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
-                Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, " Connected ", Toast.LENGTH_SHORT).show();
                 return true;
             }else if (networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED)){
-                Toast.makeText(this, " Disconnected ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
