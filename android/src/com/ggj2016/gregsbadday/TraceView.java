@@ -39,7 +39,7 @@ public class TraceView extends View {
         map.put(Region.GREEN.color, Region.GREEN);
     }
 
-    private static final float STROKE_WIDTH = 5.0f;
+    private static final float STROKE_WIDTH = 15.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
     private static final int POINTS = 5;
@@ -86,7 +86,7 @@ public class TraceView extends View {
     private void init(Context context) {
 
         paint.setAntiAlias(true);
-        paint.setColor(Color.CYAN);
+        paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
