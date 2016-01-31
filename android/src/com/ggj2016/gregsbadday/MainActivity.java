@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private static final long SCALE_DURATION = 300L;
+
     @Bind(R.id.head) Button headButton;
     @Bind(R.id.left_hand) Button leftHandButton;
     @Bind(R.id.right_hand) Button rightHandButton;
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                         RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
                         deltaX = x - lParams.leftMargin;
                         deltaY = y - lParams.topMargin;
+                        onPinTouch(v);
                         break;
                     case MotionEvent.ACTION_MOVE:
                         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
@@ -120,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
                         if (pinnedRegion != null) {
                             Toast.makeText(MainActivity.this, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
                         }
+
+                        onPinDrop(v);
 
                         break;
                     default:
@@ -148,6 +153,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         pin.bringToFront();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) pin.getLayoutParams();
+            lp.leftMargin = (int) (windowSize.x - (pin.getWidth() * 1.2));
+            lp.topMargin = (int) (windowSize.y - (pin.getHeight() * 1.5));
+            pin.setLayoutParams(lp);
+        }
     }
 
     @OnCheckedChanged (R.id.good_evil)
@@ -242,4 +257,21 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+
+    private void onPinTouch(View view) {
+        view.animate()
+                .scaleXBy(0.2f)
+                .scaleYBy(0.2f)
+                .setDuration(SCALE_DURATION)
+                .start();
+    }
+
+    private void onPinDrop(View view) {
+        view.animate()
+                .scaleXBy(-0.2f)
+                .scaleYBy(-0.2f)
+                .setDuration(SCALE_DURATION)
+                .start();
+    }
+
 }
