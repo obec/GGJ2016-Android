@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1">
 
     <Switch
         android:id="@+id/good_evil"
@@ -15,58 +15,52 @@
         android:id="@+id/head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_head"
+        android:layout_below="@+id/good_evil"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/good_evil"/>
+        android:text="@string/button_head"/>
 
     <Button
         android:id="@+id/left_hand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_left_hand"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/head"
-        android:layout_alignParentRight="true"/>
+        android:text="@string/button_left_hand"/>
 
     <Button
         android:id="@+id/right_hand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_right_hand"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/head"
-        android:layout_alignParentLeft="true"/>
+        android:text="@string/button_right_hand"/>
 
     <Button
         android:id="@+id/body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_body"
         android:layout_below="@+id/left_hand"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:text="@string/button_body"/>
 
 
     <Button
         android:id="@+id/right_leg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_right_leg"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/body"
-        android:layout_alignParentLeft="true"/>
+        android:text="@string/button_right_leg"/>
 
     <Button
         android:id="@+id/left_leg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_left_leg"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/body"
-        android:layout_alignParentRight="true"/>
+        android:text="@string/button_left_leg"/>
 
-    <Button
-        android:id="@+id/open_sandbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/open_sandbox"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+
 
     <ImageView
         android:id="@+id/pin"
@@ -78,31 +72,74 @@
         android:id="@+id/test_view"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="#FF0000"
         android:layout_centerInParent="true"
+        android:background="#FF0000"
         android:visibility="gone"/>
 
     <View
         android:id="@+id/second_test_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="#FF0000"
         android:layout_below="@id/right_leg"
+        android:background="#FF0000"
         android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/voodoo_target_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/voodoo_target_map"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:src="@drawable/voodoo_target_map"/>
 
     <ImageView
         android:id="@+id/voodoo_scene"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/voodoo_scene"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:src="@drawable/voodoo_scene"/>
 
+    <LinearLayout
+        android:id="@+id/button_container_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/open_sandbox_disrupt"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/open_sandbox_disrupt"/>
+
+        <Button
+            android:id="@+id/open_sandbox_protect"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/open_sandbox_protect"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/button_container_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button_container_1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/open_sandbox_fire"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/open_sandbox_fire"/>
+
+        <Button
+            android:id="@+id/open_sandbox_love"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/open_sandbox_love"/>
+    </LinearLayout>
+    
 </RelativeLayout>

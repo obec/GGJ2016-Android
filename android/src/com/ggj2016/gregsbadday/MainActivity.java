@@ -182,10 +182,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.open_sandbox)
-    protected void onOpenSandboxClicked(View view) {
+    @OnClick( {R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love })
+         protected void onOpenSandboxClicked(View view) {
         Intent intent = new Intent(this, PuzzleSandbox.class);
-        intent.putExtra("CardType", TraceView.CardType.LOVE);
+
+        switch (view.getId()) {
+            case R.id.open_sandbox_protect:
+                intent.putExtra("CardType", TraceView.CardType.PROTECTION);
+                break;
+            case R.id.open_sandbox_disrupt:
+                intent.putExtra("CardType", TraceView.CardType.DISRUPT);
+                break;
+            case R.id.open_sandbox_fire:
+                intent.putExtra("CardType", TraceView.CardType.FIRE);
+                break;
+            case R.id.open_sandbox_love:
+                intent.putExtra("CardType", TraceView.CardType.LOVE);
+                break;
+        }
+
         startActivity(intent);
     }
 

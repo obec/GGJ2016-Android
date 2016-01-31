@@ -10,7 +10,10 @@
     <string name="button_right_leg">Right Leg</string>
     <string name="button_left_leg">Left Leg</string>
     <string name="button_sign_in">Sign In</string>
-    <string name="open_sandbox">Open Sandbox</string>
+    <string name="open_sandbox_fire">Fire Card</string>
+    <string name="open_sandbox_love">Love Card</string>
+    <string name="open_sandbox_protect">Protect Card</string>
+    <string name="open_sandbox_disrupt">Disrupt Card</string>
     <string name="open_libgdx_sandbox">LibGDX Sandbox</string>
     <string name="clear_button_text">Clear Drawing</string>
 
