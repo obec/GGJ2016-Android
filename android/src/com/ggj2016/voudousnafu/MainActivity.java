@@ -169,16 +169,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private View createPin(){
+
         ImageView newPin = new ImageView(this);
         newPin.setImageResource(R.drawable.pin);
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams
-                                                (getResources().getDimensionPixelSize(R.dimen.pin_width),
-                                                getResources().getDimensionPixelSize(R.dimen.pin_height));
+        float x = getResources().getDimensionPixelSize(R.dimen.pin_width);
+        float y = getResources().getDimensionPixelSize(R.dimen.pin_height);
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((getResources().getDimensionPixelSize(R.dimen.pin_width)),
+                                                                        (getResources().getDimensionPixelSize(R.dimen.pin_height)));
         newPin.setLayoutParams(lp);
         newPin.setOnTouchListener(new PinTouchListener(bitmap));
         Score score = new Score();
         newPin.setTag(score);
-        scoreList.add((Score)newPin.getTag());
+        scoreList.add((Score) newPin.getTag());
+
+        lp.topMargin = (int) (windowSize.y - (y * 1.5));
+        newPin.setLayoutParams(lp);
         return newPin;
     }
 
@@ -261,7 +267,6 @@ public class MainActivity extends AppCompatActivity {
 //            pin.setLayoutParams(lp);
 //        }
 //    }
-
 
 //    @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
 //    protected void onOpenSandboxClicked(View view) {
