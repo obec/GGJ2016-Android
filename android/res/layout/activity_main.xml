@@ -38,55 +38,55 @@
         android:src="@drawable/voodoo_scene"/>
 
 
-    <LinearLayout
-        android:id="@+id/button_container_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/button_container_1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:orientation="horizontal">-->
 
-        <Button
-            android:id="@+id/open_sandbox_disrupt"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/open_sandbox_disrupt"/>
+        <!--<Button-->
+            <!--android:id="@+id/open_sandbox_disrupt"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/open_sandbox_disrupt"/>-->
 
-        <Button
-            android:id="@+id/open_sandbox_protect"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/open_sandbox_protect"/>
-    </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/open_sandbox_protect"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/open_sandbox_protect"/>-->
+    <!--</LinearLayout>-->
 
-    <LinearLayout
-        android:id="@+id/button_container_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/button_container_1"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/button_container_2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@id/button_container_1"-->
+        <!--android:orientation="horizontal">-->
 
-        <Button
-            android:id="@+id/open_sandbox_fire"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/open_sandbox_fire"/>
+        <!--<Button-->
+            <!--android:id="@+id/open_sandbox_fire"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/open_sandbox_fire"/>-->
 
-        <Button
-            android:id="@+id/open_sandbox_love"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/open_sandbox_love"/>
+        <!--<Button-->
+            <!--android:id="@+id/open_sandbox_love"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/open_sandbox_love"/>-->
 
-        <Button
-            android:id="@+id/progression"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="@string/open_sandbox_progression"/>
-    </LinearLayout>
+        <!--<Button-->
+            <!--android:id="@+id/progression"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/open_sandbox_progression"/>-->
+    <!--</LinearLayout>-->
 
 </RelativeLayout>

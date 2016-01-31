@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 /**
@@ -152,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                             ((Score) tag).setScore(pinnedRegion.name, 1);
                         }
                         v.setEnabled(false);
+                        showRune();
 
                     }
                     onPinDrop(v);
@@ -259,30 +259,30 @@ public class MainActivity extends AppCompatActivity {
 //            pin.setLayoutParams(lp);
 //        }
 //    }
-    
 
-    @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
-    protected void onOpenSandboxClicked(View view) {
 
-        Intent intent = new Intent(this, PuzzleSandbox.class);
-
-        switch (view.getId()) {
-            case R.id.open_sandbox_protect:
-                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.PROTECTION);
-                break;
-            case R.id.open_sandbox_disrupt:
-                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.DISRUPT);
-                break;
-            case R.id.open_sandbox_fire:
-                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.FIRE);
-                break;
-            case R.id.open_sandbox_love:
-                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.LOVE);
-                break;
-        }
-
-        startActivityForResult(intent, 0);
-    }
+//    @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
+//    protected void onOpenSandboxClicked(View view) {
+//
+//        Intent intent = new Intent(this, PuzzleSandbox.class);
+//
+//        switch (view.getId()) {
+//            case R.id.open_sandbox_protect:
+//                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.PROTECTION);
+//                break;
+//            case R.id.open_sandbox_disrupt:
+//                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.DISRUPT);
+//                break;
+//            case R.id.open_sandbox_fire:
+//                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.FIRE);
+//                break;
+//            case R.id.open_sandbox_love:
+//                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.LOVE);
+//                break;
+//        }
+//
+//        startActivityForResult(intent, 0);
+//    }
 
     private enum Region {
         HEAD("Head", -8430081),
@@ -340,10 +340,10 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
     }
 
-    @OnClick(R.id.progression)
-    protected void onProgresion(View view) {
-        showRune();
-    }
+//    @OnClick(R.id.progression)
+//    protected void onProgresion(View view) {
+//        showRune();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
