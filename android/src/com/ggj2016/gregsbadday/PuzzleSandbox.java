@@ -2,8 +2,6 @@ package com.ggj2016.gregsbadday;
 
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -53,23 +51,15 @@ public class PuzzleSandbox extends AppCompatActivity {
     // Function to check the connection with the server
     private boolean checkInternetConnection() {
         // get Connectivity Manager object to check connection
-        ConnectivityManager connection =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
-        Network[] networks = connection.getAllNetworks();
-        NetworkInfo networkInfo;
+        ConnectivityManager connection = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
-        for (Network mNetwork : networks) {
-            networkInfo = connection.getNetworkInfo(mNetwork);
-
-            if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
-                Toast.makeText(this, " Connected ", Toast.LENGTH_SHORT).show();
-                return true;
-            }else if (networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED)){
-                Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
-                return false;
-            }
+        if (connection.getActiveNetworkInfo() != null) {
+            Toast.makeText(this, " Connected ", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
+            return false;
         }
-
-        return false;
     }
 
     @OnClick(R.id.clear_button)
