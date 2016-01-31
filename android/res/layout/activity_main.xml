@@ -4,66 +4,21 @@
                 android:layout_height="match_parent"
                 android:weightSum="1">
 
-    <Switch
-        android:id="@+id/good_evil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"/>
-
-    <Button
-        android:id="@+id/head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/good_evil"
-        android:layout_centerHorizontal="true"
-        android:text="@string/button_head"/>
-
-    <Button
-        android:id="@+id/left_hand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/head"
-        android:text="@string/button_left_hand"/>
-
-    <Button
-        android:id="@+id/right_hand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/head"
-        android:text="@string/button_right_hand"/>
-
-    <Button
-        android:id="@+id/body"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/left_hand"
-        android:layout_centerHorizontal="true"
-        android:text="@string/button_body"/>
-
-
-    <Button
-        android:id="@+id/right_leg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/body"
-        android:text="@string/button_right_leg"/>
-
-    <Button
-        android:id="@+id/left_leg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/body"
-        android:text="@string/button_left_leg"/>
-
-
 
     <ImageView
         android:id="@+id/pin"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/pin"/>
+
+    <ImageView
+        android:id="@+id/second_pin"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/pin"/>
+
+    <ImageView
+        android:id="@+id/third_pin"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:src="@drawable/pin"/>
@@ -80,7 +35,7 @@
         android:id="@+id/second_test_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_below="@id/right_leg"
+        android:layout_below="@id/test_view"
         android:background="#FF0000"
         android:visibility="gone"/>
 
@@ -97,6 +52,14 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:src="@drawable/voodoo_scene"/>
+
+    <Switch
+        android:id="@+id/good_evil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp" />
+
 
     <LinearLayout
         android:id="@+id/button_container_1"
