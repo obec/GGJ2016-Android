@@ -19,7 +19,6 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Toast;
 
 import com.plattysoft.leonids.ParticleSystem;
 
@@ -42,8 +41,6 @@ public class TraceView extends View {
     private static final float STROKE_WIDTH = 15.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
-    private static final int POINTS = 5;
-
     private final Paint paint = new Paint();
     private final Path path = new Path();
 
@@ -55,6 +52,12 @@ public class TraceView extends View {
 
     Bitmap backgroundMaskBitmap;
     Drawable backgroundDrawable;
+
+    private boolean tealPointChecked = false;
+    private boolean yellowPointChecked = false;
+    private boolean redPointChecked = false;
+    private boolean pinkPointChecked = false;
+    private boolean greenPointChecked = false;
 
     private Point windowSize = new Point();
 
@@ -181,8 +184,30 @@ public class TraceView extends View {
                 //TODO COUNT DEM POINTS FOR SOME SORT OF WIN CONDITION
                 Region pinnedRegion = map.get(color);
                 if (pinnedRegion != null) {
-                    Timber.d("#%06X  %d", (0xFFFFFF & color), color);
-                    Toast.makeText(activity, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
+                    switch (pinnedRegion) {
+                        case TEAL:
+                            tealPointChecked = true;
+                            break;
+                        case YELLOW:
+                            yellowPointChecked = true;
+                            break;
+                        case RED:
+                            redPointChecked = true;
+                            break;
+                        case PINK:
+                            pinkPointChecked = true;
+                            break;
+                        case GREEN:
+                            greenPointChecked = true;
+                            break;
+                    }
+
+                    boolean allChecked = allChecked();
+
+                    if (allChecked) {
+                        ((PuzzleSandbox) activity).finishCardActivity(true);
+                    }
+                    Timber.d("All checked: " + allChecked);
                 }
 
                 break;
@@ -199,6 +224,14 @@ public class TraceView extends View {
         lastTouch.set(x, y);
 
         return true;
+    }
+
+    private boolean allChecked() {
+        return tealPointChecked &&
+                yellowPointChecked &&
+                redPointChecked &&
+                pinkPointChecked &&
+                greenPointChecked;
     }
 
     public enum CardType {

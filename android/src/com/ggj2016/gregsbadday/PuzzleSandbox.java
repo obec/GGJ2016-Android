@@ -21,6 +21,9 @@ public class PuzzleSandbox extends AppCompatActivity {
     public static final String KEY_TIME_REMAINING = "remaining";
     public static final String KEY_CARD_TYPE = "type";
 
+    public static final int RESULT_RUNE_COMPLETE = 0;
+    public static final int RESULT_TIME_UP = 1;
+
     private Bitmap bitmap = null;
 
     @Bind(R.id.trace_view) TraceView traceView;
@@ -67,6 +70,12 @@ public class PuzzleSandbox extends AppCompatActivity {
             Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    public void finishCardActivity(boolean didWin) {
+        int result = didWin ? RESULT_RUNE_COMPLETE : RESULT_TIME_UP;
+        setResult(result);
+        finish();
     }
 
     @OnClick(R.id.clear_button)
