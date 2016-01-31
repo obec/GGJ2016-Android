@@ -35,7 +35,7 @@ public class TraceView extends View {
     private ParticleSystem particleSystem;
     private Activity activity;
 
-    private static final int rectWidth = 20;
+    private static final int rectWidth = 50;
 
     private static final int pointOneLeft = 98;
     private static final int pointOneRight = pointOneLeft + rectWidth;
