@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.ggj2016.gregsbadday.R;
 
@@ -13,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import timber.log.Timber;
 
 public class PuzzleSandbox extends AppCompatActivity {
 
@@ -25,6 +24,13 @@ public class PuzzleSandbox extends AppCompatActivity {
     public static final int RESULT_TIME_UP = 1;
 
     private long mTimeRemaining;
+    private Runnable mTimesUpRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Timber.d("Round over from puzzle.");
+            finishCardActivity(false);
+        }
+    };
 
     @Bind(R.id.trace_view) TraceView traceView;
 
@@ -44,23 +50,14 @@ public class PuzzleSandbox extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finishCardActivity(false);
-            }
-        }, mTimeRemaining);
+        mHandler.postDelayed(mTimesUpRunnable, mTimeRemaining);
     }
 
-
     public void finishCardActivity(boolean didWin) {
+        mHandler.removeCallbacksAndMessages(mTimesUpRunnable);
         int result = didWin ? RESULT_RUNE_COMPLETE : RESULT_TIME_UP;
         setResult(result);
         finish();
     }
 
-    @OnClick(R.id.clear_button)
-    void onClearButtonClicked(View view) {
-        traceView.clearDrawing();
-    }
 }

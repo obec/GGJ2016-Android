@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-
     private static final long SCALE_DURATION = 300L;
     private static final long ROUND_TIME = TimeUnit.SECONDS.toMillis(15);
     @Bind(R.id.test_view) View testView;
@@ -354,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_TIME_UP) {
             roundOver();
         } else {
+            mHandler.removeCallbacksAndMessages(mRoundOverRunnable);
             mHandler.postDelayed(mRoundOverRunnable, getTimeRemaining());
             View view = createPin();
             ((ViewGroup)rootView).addView(view);
@@ -363,32 +363,44 @@ public class MainActivity extends AppCompatActivity {
     private Runnable mRoundOverRunnable = new Runnable() {
         @Override
         public void run() {
+            Timber.d("Round over from main.");
             roundOver();
         }
     };
 
     private void roundOver() {
+
+        Timber.d("Round over.");
         Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
         mRoundOver = true;
         PinMessage message = preparePinMessage();
         boolean internetConnection = checkInternetConnection();
         if(internetConnection) {
+            mWaitingView = getLayoutInflater().inflate(R.layout.widget_waiting, rootView, true);
             NetworkManager.postServer(message, new NetworkManager.Listener() {
                 @Override
                 public void onSuccess(GameStateMessage message) {
                     Timber.d("Success!");
-                    reset();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            reset();
+                        }
+                    });
                 }
 
                 @Override
                 public void onError() {
                     Timber.d("Failure.");
-                    reset();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            reset();
+                        }
+                    });
                 }
             });
         }
-
-        mWaitingView = getLayoutInflater().inflate(R.layout.widget_waiting, rootView, true);
     }
 
     private long getTimeRemaining() {

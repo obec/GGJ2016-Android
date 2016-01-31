@@ -5,17 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/clear_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/clear_button_text"/>
-
     <com.ggj2016.voudousnafu.TraceView
         android:id="@+id/trace_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/clear_button"/>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
