@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import timber.log.Timber;
 
@@ -38,6 +37,7 @@ import timber.log.Timber;
  */
 public class MainActivity extends AppCompatActivity {
 
+    public static final String KEY_IS_GOOD = "is_good";
     public static final int RESULT_RUNE_COMPLETE = 0;
     public static final int RESULT_TIME_UP = 1;
 
@@ -93,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
         mRoundStartTime = System.currentTimeMillis();
         showRune();
+        Intent intent = getIntent();
+        if (intent != null) {
+            isGood = intent.getBooleanExtra(KEY_IS_GOOD, false);
+        }
     }
 
 
@@ -255,11 +259,7 @@ public class MainActivity extends AppCompatActivity {
 //            pin.setLayoutParams(lp);
 //        }
 //    }
-
-    @OnCheckedChanged(R.id.good_evil)
-    protected void onGoodEvilChanged(boolean checked) {
-        isGood = checked;
-    }
+    
 
     @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
     protected void onOpenSandboxClicked(View view) {

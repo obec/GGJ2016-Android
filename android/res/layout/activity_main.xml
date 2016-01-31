@@ -37,13 +37,6 @@
         android:layout_centerInParent="true"
         android:src="@drawable/voodoo_scene"/>
 
-    <Switch
-        android:id="@+id/good_evil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp" />
-
 
     <LinearLayout
         android:id="@+id/button_container_1"

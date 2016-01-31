@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,8 +20,8 @@ public class SignIn extends AppCompatActivity {
     private static final String TAG = SignIn.class.getSimpleName();
 
     @Bind(R.id.sign_in) Button signInButton;
-    @Bind(R.id.sign_in_text)
-    EditText signInText;
+    @Bind(R.id.good_evil) Switch goodEvil;
+    @Bind(R.id.sign_in_text) EditText signInText;
 
 
     @Override
@@ -34,6 +35,7 @@ public class SignIn extends AppCompatActivity {
     protected void onSignInClicked(){
         Log.d(TAG, String.format("Login text: %s", signInText.getText()));
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.KEY_IS_GOOD, goodEvil.isChecked());
         startActivity(intent);
         finish();
     }

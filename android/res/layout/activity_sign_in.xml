@@ -17,4 +17,12 @@
         android:layout_height="wrap_content"
         android:text="@string/button_sign_in"
         android:layout_gravity="center_horizontal" />
+
+    <Switch
+        android:id="@+id/good_evil"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp" />
+
 </LinearLayout>
