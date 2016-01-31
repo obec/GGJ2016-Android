@@ -25,8 +25,6 @@ import com.plattysoft.leonids.ParticleSystem;
 import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
-
 public class TraceView extends View {
 
     private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
@@ -156,6 +154,7 @@ public class TraceView extends View {
                 path.moveTo(x, y);
                 lastTouch.set(x, y);
                 particleSystem.emit((int) x, (int) y, 40);
+                checkCollision(x, y);
                 break;
             case MotionEvent.ACTION_UP:
                 particleSystem.stopEmitting();
@@ -175,41 +174,7 @@ public class TraceView extends View {
                 path.lineTo(x, y);
                 particleSystem.updateEmitPoint((int) x, (int) y);
 
-                float percentageX = Math.max(0, Math.min(0.999f, x / windowSize.x));
-                float percentageY = Math.max(0, Math.min(0.999f, y / windowSize.y));
-                float targetX = backgroundMaskBitmap.getWidth() * percentageX;
-                float targetY = backgroundMaskBitmap.getHeight() * percentageY;
-                int color = backgroundMaskBitmap.getPixel((int)targetX, (int)targetY);
-
-                //TODO COUNT DEM POINTS FOR SOME SORT OF WIN CONDITION
-                Region pinnedRegion = map.get(color);
-                if (pinnedRegion != null) {
-                    switch (pinnedRegion) {
-                        case TEAL:
-                            tealPointChecked = true;
-                            break;
-                        case YELLOW:
-                            yellowPointChecked = true;
-                            break;
-                        case RED:
-                            redPointChecked = true;
-                            break;
-                        case PINK:
-                            pinkPointChecked = true;
-                            break;
-                        case GREEN:
-                            greenPointChecked = true;
-                            break;
-                    }
-
-                    boolean allChecked = allChecked();
-
-                    if (allChecked) {
-                        ((PuzzleSandbox) activity).finishCardActivity(true);
-                    }
-                    Timber.d("All checked: " + allChecked);
-                }
-
+                checkCollision(x, y);
                 break;
             default:
                 return false;
@@ -224,6 +189,41 @@ public class TraceView extends View {
         lastTouch.set(x, y);
 
         return true;
+    }
+
+    private void checkCollision(float x, float y) {
+        float percentageX = Math.max(0, Math.min(0.999f, x / windowSize.x));
+        float percentageY = Math.max(0, Math.min(0.999f, y / windowSize.y));
+        float targetX = backgroundMaskBitmap.getWidth() * percentageX;
+        float targetY = backgroundMaskBitmap.getHeight() * percentageY;
+        int color = backgroundMaskBitmap.getPixel((int) targetX, (int) targetY);
+
+        Region pinnedRegion = map.get(color);
+        if (pinnedRegion != null) {
+            switch (pinnedRegion) {
+                case TEAL:
+                    tealPointChecked = true;
+                    break;
+                case YELLOW:
+                    yellowPointChecked = true;
+                    break;
+                case RED:
+                    redPointChecked = true;
+                    break;
+                case PINK:
+                    pinkPointChecked = true;
+                    break;
+                case GREEN:
+                    greenPointChecked = true;
+                    break;
+            }
+
+            boolean allChecked = allChecked();
+
+            if (allChecked) {
+                ((PuzzleSandbox) activity).finishCardActivity(true);
+            }
+        }
     }
 
     private boolean allChecked() {

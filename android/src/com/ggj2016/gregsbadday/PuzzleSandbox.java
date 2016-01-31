@@ -1,7 +1,6 @@
 package com.ggj2016.gregsbadday;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +28,6 @@ public class PuzzleSandbox extends AppCompatActivity {
     public static final int RESULT_RUNE_COMPLETE = 0;
     public static final int RESULT_TIME_UP = 1;
 
-    private Bitmap bitmap = null;
     private long mTimeRemaining;
 
     @Bind(R.id.trace_view) TraceView traceView;
