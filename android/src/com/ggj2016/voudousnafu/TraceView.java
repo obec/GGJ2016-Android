@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -90,7 +89,7 @@ public class TraceView extends View {
     private void init(Context context) {
 
         paint.setAntiAlias(true);
-        paint.setColor(Color.RED);
+        paint.setColor(context.getResources().getColor(R.color.colorAccent));
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
