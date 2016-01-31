@@ -111,7 +111,7 @@ public class TraceView extends View {
         switch (cardType) {
             case DISRUPT:
                 backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.disruptcardmask) ;
-                backgroundDrawable = getResources().getDrawable(R.drawable.disruptcardmask);
+                backgroundDrawable = getResources().getDrawable(R.drawable.disruptcard);
                 break;
             case PROTECTION:
                 backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.protectioncardmask) ;
