@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     private void onPinTouch(View view) {
