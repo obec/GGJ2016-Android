@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                                 preparePinMessage();
                             }
                         }
+                        v.setEnabled(false);
 
                     }
                     onPinDrop(v);
