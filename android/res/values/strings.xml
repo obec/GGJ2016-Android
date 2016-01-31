@@ -17,5 +17,6 @@
     <string name="open_sandbox_disrupt">Disrupt Card</string>
     <string name="open_libgdx_sandbox">LibGDX Sandbox</string>
     <string name="clear_button_text">Clear Drawing</string>
+    <string name="waiting">Waiting for remaining players&#8230;</string>
 
 </resources>

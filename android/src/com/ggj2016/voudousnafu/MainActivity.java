@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.root_view) RelativeLayout rootView;
 
     private long mRoundStartTime;
+    private View mWaitingView;
 
     TraceView.CardType[] runeCards = TraceView.CardType.values();
     int runeCardIndex = 0;
@@ -376,20 +377,23 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(GameStateMessage message) {
                     Timber.d("Success!");
+                    reset();
                 }
 
                 @Override
                 public void onError() {
                     Timber.d("Failure.");
+                    reset();
                 }
             });
         }
+
+        mWaitingView = getLayoutInflater().inflate(R.layout.widget_waiting, rootView, true);
     }
 
     private long getTimeRemaining() {
         return ROUND_TIME - (System.currentTimeMillis() - mRoundStartTime);
     }
-
 
     private boolean checkInternetConnection() {
         // get Connectivity Manager object to check connection
@@ -401,6 +405,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
             return false;
+        }
+    }
+
+    private void reset() {
+        if (mWaitingView != null) {
+            rootView.removeView(mWaitingView);
         }
     }
 
