@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -20,15 +19,31 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Toast;
 
 import com.plattysoft.leonids.ParticleSystem;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import timber.log.Timber;
 
 public class TraceView extends View {
 
+    private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
+    static {
+        map.put(Region.ONE.color, Region.ONE);
+        map.put(Region.TWO.color, Region.TWO);
+        map.put(Region.THREE.color, Region.THREE);
+        map.put(Region.FOUR.color, Region.FOUR);
+        map.put(Region.FIVE.color, Region.FIVE);
+        map.put(Region.SIX.color, Region.SIX);
+    }
+
     private static final float STROKE_WIDTH = 5.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
+
+    private static final int POINTS = 6;
 
     private final Paint paint = new Paint();
     private final Path path = new Path();
@@ -43,6 +58,8 @@ public class TraceView extends View {
     Drawable tintedBackgroundDrawable;
 
     private Point windowSize = new Point();
+
+    private int pointCount = 0;
 
     public TraceView(Context context) {
         this(context, null);
@@ -77,11 +94,10 @@ public class TraceView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
 
-        backgroundBitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.alpha_test);
-        tintedBackgroundDrawable = getResources().getDrawable(R.drawable.alpha_test);
+        backgroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.temp_rune);
+        tintedBackgroundDrawable = getResources().getDrawable(R.drawable.temp_rune);
         if (tintedBackgroundDrawable != null) {
-            tintedBackgroundDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+            //tintedBackgroundDrawable.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
             setBackground(tintedBackgroundDrawable);
         }
 
@@ -149,6 +165,10 @@ public class TraceView extends View {
                 Timber.d("#%06X  %d", (0xFFFFFF & color), color);
 
                 //TODO COUNT DEM POINTS
+                Region pinnedRegion = map.get(color);
+                if (pinnedRegion != null) {
+                    Toast.makeText(activity, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
+                }
                 
                 break;
             default:
@@ -164,6 +184,28 @@ public class TraceView extends View {
         lastTouch.set(x, y);
 
         return true;
+    }
+
+    private enum Region{
+        ONE("One", -9219073),
+        TWO("Two", -14287090),
+        THREE("Three", -130301),
+        FOUR("Four", -15840001),
+        FIVE("Five",-14066),
+        SIX("Six", -61711);
+
+        int color;
+        String name;
+        Region(String name, int color) {
+            this.color = color;
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s #%06X  %d",name, (0xFFFFFF & color), color);
+        }
+
     }
 
     private void expandDirtyRect(float x, float y) {
