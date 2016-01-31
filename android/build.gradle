@@ -16,7 +16,7 @@ android {
     }
     defaultConfig {
         applicationId "com.ggj2016.gregsbadday"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 23
     }
 
