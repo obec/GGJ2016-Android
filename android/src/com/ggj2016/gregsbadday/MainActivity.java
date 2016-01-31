@@ -144,7 +144,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        mRoundStartTime = System.currentTimeMillis();
+        showRune();
     }
+
     private boolean isPinOverView(View view, PointF pointF){
         PointF pinPoint = getPinPoint();
         if (((pinPoint.x > view.getLeft()) && (pinPoint.x < view.getRight())) &&
@@ -164,9 +168,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         pin.bringToFront();
-
-        mRoundStartTime = System.currentTimeMillis();
-        showRune();
     }
 
     @Override
