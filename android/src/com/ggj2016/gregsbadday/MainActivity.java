@@ -1,7 +1,10 @@
 package com.ggj2016.gregsbadday;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,6 +38,13 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.right_leg) Button rightLegButton;
     @Bind(R.id.left_leg) Button leftLegButton;
     @Bind(R.id.pin) ImageView pin;
+    @Bind(R.id.test_view) View testView;
+    @Bind(R.id.second_test_view) View secondTestView;
+    @Bind(R.id.color_wheel) ImageView colorWheel;
+
+
+
+    private List<View> viewList = new ArrayList();
     private boolean isGood;
 
 
@@ -45,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         bodyButton.setTag(Region.BODY);
         rightLegButton.setTag(Region.RIGHT_LEG);
         leftLegButton.setTag(Region.LEFT_LEG);
+        viewList.add(testView);
+        viewList.add(secondTestView);
+        final Bitmap bitmap = ((BitmapDrawable)colorWheel.getDrawable()).getBitmap();
+
         pin.setOnTouchListener(new View.OnTouchListener() {
             float deltaX;
             float deltaY;
@@ -67,7 +85,17 @@ public class MainActivity extends AppCompatActivity {
                         pin.setLayoutParams(layoutParams);
                         break;
                     case MotionEvent.ACTION_UP:
-                        Timber.d("X: %d, Y: %d", (int)pin.getX(), (int)pin.getY());
+                        PointF pinPoint = getPinPoint();
+                        Timber.d("X: %d, Y: %d", (int) pinPoint.x, (int) pinPoint.y);
+
+                        int color = bitmap.getPixel((int)pinPoint.x, (int)pinPoint.y);
+                        Timber.d("#%06X", (0xFFFFFF & color));
+                        for(View view: viewList) {
+                            boolean pinOverView = isPinOverView(view, pinPoint);
+                            Timber.d("Is the pin over the view? %b", pinOverView);
+                            Toast.makeText(MainActivity.this, "Is pin over view? " + pinOverView, Toast.LENGTH_SHORT).show();
+                        }
+
                         break;
                     default:
                         return false;
@@ -75,6 +103,26 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+    private boolean isPinOverView(View view, PointF pointF){
+        PointF pinPoint = getPinPoint();
+        if (((pinPoint.x > view.getLeft()) && (pinPoint.x < view.getRight())) &&
+                ((pinPoint.y < view.getBottom()) && (pinPoint.y > view.getTop()))){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+    private PointF getPinPoint(){
+        return new PointF(pin.getX(), pin.getY() + pin.getHeight());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        pin.bringToFront();
     }
 
     @OnCheckedChanged (R.id.good_evil)

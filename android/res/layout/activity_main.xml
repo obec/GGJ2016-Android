@@ -74,6 +74,19 @@
         android:layout_height="75dp"
         android:src="@drawable/pin"/>
 
+    <View
+        android:id="@+id/test_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="#FF0000"
+        android:layout_centerInParent="true"/>
+
+    <View
+        android:id="@+id/second_test_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FF0000"
+        android:layout_below="@id/right_leg"/>
 
     <Button
         android:id="@+id/open_libgdx_sandbox"
@@ -83,5 +96,12 @@
         android:text="@string/open_libgdx_sandbox"
         android:layout_above="@+id/open_sandbox"
         android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/color_wheel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/color_wheel" />
+
 
 </RelativeLayout>
