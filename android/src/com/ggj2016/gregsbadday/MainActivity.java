@@ -309,8 +309,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-
     private void onPinTouch(View view) {
         view.animate()
                 .scaleXBy(0.2f)
