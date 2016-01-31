@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             isGood = intent.getBooleanExtra(KEY_IS_GOOD, false);
         }
+
+        mWaitingView = getLayoutInflater().inflate(R.layout.widget_waiting, rootView, false);
     }
 
 
@@ -325,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showRune() {
-        mHandler.removeCallbacksAndMessages(mRoundOverRunnable);
+        mHandler.removeCallbacksAndMessages(null);
         TraceView.CardType type = runeCards[runeCardIndex];
         runeCardIndex++;
 
@@ -353,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_TIME_UP) {
             roundOver();
         } else {
-            mHandler.removeCallbacksAndMessages(mRoundOverRunnable);
+            mHandler.removeCallbacksAndMessages(null);
             mHandler.postDelayed(mRoundOverRunnable, getTimeRemaining());
             View view = createPin();
             ((ViewGroup)rootView).addView(view);
@@ -369,37 +371,39 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void roundOver() {
+        if (!mRoundOver) {
+            Timber.d("Round over.");
+            Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
+            mRoundOver = true;
+            PinMessage message = preparePinMessage();
 
-        Timber.d("Round over.");
-        Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
-        mRoundOver = true;
-        PinMessage message = preparePinMessage();
-        boolean internetConnection = checkInternetConnection();
-        if(internetConnection) {
-            mWaitingView = getLayoutInflater().inflate(R.layout.widget_waiting, rootView, true);
-            NetworkManager.postServer(message, new NetworkManager.Listener() {
-                @Override
-                public void onSuccess(GameStateMessage message) {
-                    Timber.d("Success!");
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            reset();
-                        }
-                    });
-                }
+            boolean internetConnection = checkInternetConnection();
+            if (internetConnection) {
+                rootView.addView(mWaitingView);
+                NetworkManager.postServer(message, new NetworkManager.Listener() {
+                    @Override
+                    public void onSuccess(GameStateMessage message) {
+                        Timber.d("Success!");
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                reset();
+                            }
+                        });
+                    }
 
-                @Override
-                public void onError() {
-                    Timber.d("Failure.");
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            reset();
-                        }
-                    });
-                }
-            });
+                    @Override
+                    public void onError() {
+                        Timber.d("Failure.");
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                reset();
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -421,6 +425,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void reset() {
+        Timber.d("Resetting.");
         if (mWaitingView != null) {
             rootView.removeView(mWaitingView);
         }

@@ -54,7 +54,7 @@ public class PuzzleSandbox extends AppCompatActivity {
     }
 
     public void finishCardActivity(boolean didWin) {
-        mHandler.removeCallbacksAndMessages(mTimesUpRunnable);
+        mHandler.removeCallbacksAndMessages(null);
         int result = didWin ? RESULT_RUNE_COMPLETE : RESULT_TIME_UP;
         setResult(result);
         finish();

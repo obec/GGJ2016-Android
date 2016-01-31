@@ -17,10 +17,8 @@ import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 
 import com.ggj2016.gregsbadday.R;
-import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +36,7 @@ public class TraceView extends View {
         map.put(Region.GREEN.color, Region.GREEN);
     }
 
-    private static final float STROKE_WIDTH = 15.0f;
+    private static final float STROKE_WIDTH = 30.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
     private final Paint paint = new Paint();
@@ -47,7 +45,7 @@ public class TraceView extends View {
     private final PointF lastTouch = new PointF();
     private final RectF dirtyRect = new RectF();
 
-    private ParticleSystem particleSystem;
+//    private ParticleSystem particleSystem;
     private Activity activity;
 
     Bitmap backgroundMaskBitmap;
@@ -100,11 +98,11 @@ public class TraceView extends View {
             Display display = activity.getWindowManager().getDefaultDisplay();
             display.getSize(windowSize);
 
-            particleSystem = new ParticleSystem(activity, 100, R.drawable.star_white, 800);
-            particleSystem.setScaleRange(0.7f, 1.3f);
-            particleSystem.setSpeedRange(0.05f, 0.1f);
-            particleSystem.setRotationSpeedRange(90, 180);
-            particleSystem.setFadeOut(200, new AccelerateInterpolator());
+//            particleSystem = new ParticleSystem(activity, 100, R.drawable.star_white, 800);
+//            particleSystem.setScaleRange(0.7f, 1.3f);
+//            particleSystem.setSpeedRange(0.05f, 0.1f);
+//            particleSystem.setRotationSpeedRange(90, 180);
+//            particleSystem.setFadeOut(200, new AccelerateInterpolator());
         } else {
             throw new IllegalStateException("try again with an activity context");
         }
@@ -137,7 +135,7 @@ public class TraceView extends View {
 
     public void clearDrawing() {
         path.reset();
-        particleSystem.cancel();
+//        particleSystem.cancel();
         invalidate();
     }
 
@@ -155,11 +153,11 @@ public class TraceView extends View {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(x, y);
                 lastTouch.set(x, y);
-                particleSystem.emit((int) x, (int) y, 40);
+//                particleSystem.emit((int) x, (int) y, 40);
                 checkCollision(x, y);
                 break;
             case MotionEvent.ACTION_UP:
-                particleSystem.stopEmitting();
+//                particleSystem.stopEmitting();
                 break;
             case MotionEvent.ACTION_MOVE:
                 resetDirtyRect(x, y);
@@ -174,7 +172,7 @@ public class TraceView extends View {
                 }
 
                 path.lineTo(x, y);
-                particleSystem.updateEmitPoint((int) x, (int) y);
+//                particleSystem.updateEmitPoint((int) x, (int) y);
 
                 checkCollision(x, y);
                 break;
