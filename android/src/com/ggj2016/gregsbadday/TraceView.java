@@ -91,12 +91,6 @@ public class TraceView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
 
-        backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.disruptcardmask);
-        backgroundDrawable = getResources().getDrawable(R.drawable.disruptcard);
-        if (backgroundDrawable != null) {
-            setBackground(backgroundDrawable);
-        }
-
         if (context instanceof Activity) {
             activity = (Activity) context;
 
@@ -110,6 +104,31 @@ public class TraceView extends View {
             particleSystem.setFadeOut(200, new AccelerateInterpolator());
         } else {
             throw new IllegalStateException("try again with an activity context");
+        }
+    }
+
+    public void setCardType(CardType cardType) {
+        switch (cardType) {
+            case DISRUPT:
+                backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.disruptcardmask) ;
+                backgroundDrawable = getResources().getDrawable(R.drawable.disruptcardmask);
+                break;
+            case PROTECTION:
+                backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.protectioncardmask) ;
+                backgroundDrawable = getResources().getDrawable(R.drawable.protectioncard);
+                break;
+            case FIRE:
+                backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.firecardmask) ;
+                backgroundDrawable = getResources().getDrawable(R.drawable.firecard);
+                break;
+            case LOVE:
+                backgroundMaskBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.lovecardmask) ;
+                backgroundDrawable = getResources().getDrawable(R.drawable.lovecard);
+                break;
+        }
+
+        if (backgroundDrawable != null) {
+            setBackground(backgroundDrawable);
         }
     }
 
@@ -158,11 +177,11 @@ public class TraceView extends View {
                 float targetX = backgroundMaskBitmap.getWidth() * percentageX;
                 float targetY = backgroundMaskBitmap.getHeight() * percentageY;
                 int color = backgroundMaskBitmap.getPixel((int)targetX, (int)targetY);
-                Timber.d("#%06X  %d", (0xFFFFFF & color), color);
 
-                //TODO COUNT DEM POINTS
+                //TODO COUNT DEM POINTS FOR SOME SORT OF WIN CONDITION
                 Region pinnedRegion = map.get(color);
                 if (pinnedRegion != null) {
+                    Timber.d("#%06X  %d", (0xFFFFFF & color), color);
                     Toast.makeText(activity, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
                 }
 
@@ -182,7 +201,14 @@ public class TraceView extends View {
         return true;
     }
 
-    private enum Region{
+    public enum CardType {
+        PROTECTION,
+        FIRE,
+        DISRUPT,
+        LOVE
+    }
+
+    private enum Region {
         TEAL("Teal", -16712193),
         YELLOW("Yellow", -1280),
         RED("Red", -55808),
