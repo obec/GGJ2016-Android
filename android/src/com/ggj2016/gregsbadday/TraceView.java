@@ -185,6 +185,7 @@ public class TraceView extends View {
                     Log.e(TAG, "Point Five Intersected");
                     Toast.makeText(activity, "Point Five Intersected", Toast.LENGTH_SHORT).show();
                 }
+                
                 break;
             default:
                 return false;
