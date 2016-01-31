@@ -236,12 +236,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private enum Region {
-        HEAD("Head", -9219073),
-        LEFT_HAND("Left hand", -14287090),
-        RIGHT_HAND("Right hand", -130301),
-        BODY("Body", -15840001),
-        RIGHT_LEG("Right leg", -14066),
-        LEFT_LEG("Left leg", -61711);
+        HEAD("Head", -8430081),
+        LEFT_HAND("Left hand", -14024950),
+        RIGHT_HAND("Right hand", -64512),
+        BODY("Body", -15772161),
+        RIGHT_LEG("Right leg", -12278),
+        LEFT_LEG("Left leg", -63245);
 
         int color;
         String name;
