@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Toast;
 
 import com.plattysoft.leonids.ParticleSystem;
 
@@ -33,7 +34,6 @@ public class TraceView extends View {
 
     private ParticleSystem particleSystem;
     private Activity activity;
-
 
     private static final int rectWidth = 20;
 
@@ -171,14 +171,19 @@ public class TraceView extends View {
 
                 if (dirtyRect.intersect(pointOneRect)) {
                     Log.e(TAG, "Point One Intersected");
+                    Toast.makeText(activity, "Point One Intersected", Toast.LENGTH_SHORT).show();
                 } else if (dirtyRect.intersect(pointTwoRect)) {
                     Log.e(TAG, "Point Two Intersected");
+                    Toast.makeText(activity, "Point Two Intersected", Toast.LENGTH_SHORT).show();
                 } else if (dirtyRect.intersect(pointThreeRect)) {
                     Log.e(TAG, "Point Three Intersected");
+                    Toast.makeText(activity, "Point Three Intersected", Toast.LENGTH_SHORT).show();
                 } else if (dirtyRect.intersect(pointFourRect)) {
                     Log.e(TAG, "Point Four Intersected");
+                    Toast.makeText(activity, "Point Four Intersected", Toast.LENGTH_SHORT).show();
                 } else if (dirtyRect.intersect(pointFiveRect)) {
                     Log.e(TAG, "Point Five Intersected");
+                    Toast.makeText(activity, "Point Five Intersected", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
