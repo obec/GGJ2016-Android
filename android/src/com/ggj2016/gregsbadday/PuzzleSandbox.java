@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,6 +17,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,25 +35,32 @@ public class PuzzleSandbox extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
 
+        // Variable for checking the connection status
+        boolean internetConnection = false;
+
         // Check connection with the server
-        checkInternetConenction();
-        connectToServer("https://voodoo.madsciencesoftware.com");
+        internetConnection = checkInternetConnection();
+        if(internetConnection) {
+            String urlToConnect = "https://voodoo.madsciencesoftware.com";
+            postServer(urlToConnect);
+        }
     }
 
-    private boolean checkInternetConenction() {
+    // Function to check the connection with the server
+    private boolean checkInternetConnection() {
         // get Connectivity Manager object to check connection
-        ConnectivityManager connec =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
-        Network[] networks = connec.getAllNetworks();
+        ConnectivityManager connection =(ConnectivityManager)getSystemService(getBaseContext().CONNECTIVITY_SERVICE);
+        Network[] networks = connection.getAllNetworks();
         NetworkInfo networkInfo;
 
         for (Network mNetwork : networks) {
-            networkInfo = connec.getNetworkInfo(mNetwork);
+            networkInfo = connection.getNetworkInfo(mNetwork);
 
             if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
                 Toast.makeText(this, " Connected ", Toast.LENGTH_LONG).show();
                 return true;
             }else if (networkInfo.getState().equals(NetworkInfo.State.DISCONNECTED)){
-                Toast.makeText(this, " DisConnected ", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, " Disconnected ", Toast.LENGTH_LONG).show();
                 return false;
             }
         }
@@ -58,7 +71,7 @@ public class PuzzleSandbox extends AppCompatActivity {
     // Android doesn't like network operations in the UI thread.
     // This function acts a wrapper for the actual HTTP connection.
     // A new thread is created in this function for the Network Operations
-    private void connectToServer(String urlStr)
+    private void getServer(String urlStr)
     {
         final String url = urlStr;
         new Thread() {
@@ -66,7 +79,8 @@ public class PuzzleSandbox extends AppCompatActivity {
                 InputStream inputStream = null;
 
                 try {
-                    inputStream = openHttpConnection(url);
+                    // Call the function to do the get
+                    inputStream = getHttpConnection(url);
 
                     // Close the input stream if data was received
                     if(inputStream != null) {
@@ -82,7 +96,41 @@ public class PuzzleSandbox extends AppCompatActivity {
         }.start();
     }
 
-    private InputStream openHttpConnection(String urlStr) {
+    // Wrapper for the post
+    private void postServer(String urlStr)
+    {
+        final String url = urlStr;
+        new Thread() {
+            public void run() {
+                InputStream inputStream = null;
+
+                try {
+                    // Call the function to do the post
+                    inputStream = postHttpConnection(url);
+
+                    // Close the input stream if data was received
+                    if(inputStream != null) {
+                        Log.d("Data", "Posted");
+                        BufferedReader bufferedReader =
+                                new BufferedReader(new InputStreamReader(inputStream,"utf-8"));
+                        String line = null;
+
+                        while ((line = bufferedReader.readLine()) != null) {
+                            Log.d("Output: ", line);
+                        }
+                        bufferedReader.close();
+                    }
+                }
+
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    // Function which does the work for "GET"
+    private InputStream getHttpConnection(String urlStr) {
         InputStream inputStream = null;
         int responseCode = -1;
 
@@ -106,7 +154,7 @@ public class PuzzleSandbox extends AppCompatActivity {
             // Check to see if the connection to the server was okay
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 inputStream = httpConnection.getInputStream();
-                Log.d("HTTP", "OK");
+                Log.d("HTTP Get", "OK");
             }
         }
 
@@ -115,6 +163,61 @@ public class PuzzleSandbox extends AppCompatActivity {
         }
 
         catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Return the stream from the server
+        return inputStream;
+    }
+
+    // Function which does the work for "POST"
+    private InputStream postHttpConnection(String urlStr){
+        InputStream inputStream = null;
+        int responseCode = -1;
+
+        try {
+            URL url = new URL(urlStr);
+            URLConnection urlConnection = url.openConnection();
+
+            // Sanity check to see if the URL is a HTTP URL
+            if (!(urlConnection instanceof HttpURLConnection)) {
+                throw new IOException("URL is not an HTTP URL");
+            }
+
+            // Connect to the server with user interaction disabled and redirection enabled
+            // and set up to send bytes
+            HttpURLConnection httpConnection = (HttpURLConnection) urlConnection;
+            httpConnection.setAllowUserInteraction(false);
+            httpConnection.setInstanceFollowRedirects(true);
+            httpConnection.setDoOutput(true);
+            httpConnection.setRequestMethod("POST");
+            httpConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            httpConnection.connect();
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("target", "body");
+            jsonObject.put("value", 12345);
+
+
+            OutputStream outputStream = httpConnection.getOutputStream();
+            outputStream.write(jsonObject.toString().getBytes("UTF-8"));
+            outputStream.flush();
+
+            responseCode = httpConnection.getResponseCode();
+
+            // Check to see if there is a response 200 from the server
+            if (responseCode == 200) {
+                inputStream = httpConnection.getInputStream();
+                Log.d("Response Code", ""+responseCode);
+                Log.d("HTTP Post", "OK");
+            }
+        }
+        catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
