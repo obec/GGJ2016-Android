@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/round_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textSize="18sp"
+        android:visibility="gone"/>
 
     <EditText
         android:id="@+id/sign_in_text"
@@ -9,13 +20,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:inputType="number|numberDecimal"
+        android:hint="@string/name"
         android:imeOptions="actionDone"/>
 
     <Button
         android:id="@+id/sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_sign_in"
+        android:text="@string/button_play"
         android:layout_gravity="center_horizontal" />
 
     <Switch

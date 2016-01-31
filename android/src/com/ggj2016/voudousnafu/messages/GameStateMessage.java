@@ -18,6 +18,6 @@ public class GameStateMessage {
     @SerializedName("body_score")
     int bodyScore;
     @SerializedName("total_score")
-    int totalScore;
+    public int totalScore;
 
 }

@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-
     private static final long SCALE_DURATION = 300L;
     private static final long ROUND_TIME = TimeUnit.SECONDS.toMillis(15);
     @Bind(R.id.test_view) View testView;
@@ -98,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         if (intent != null) {
             isGood = intent.getBooleanExtra(KEY_IS_GOOD, false);
         }
+
+        mWaitingView = getLayoutInflater().inflate(R.layout.widget_waiting, rootView, false);
     }
 
 
@@ -331,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showRune() {
-        mHandler.removeCallbacksAndMessages(mRoundOverRunnable);
+        mHandler.removeCallbacksAndMessages(null);
         TraceView.CardType type = runeCards[runeCardIndex];
         runeCardIndex++;
 
@@ -359,6 +360,7 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == RESULT_TIME_UP) {
             roundOver();
         } else {
+            mHandler.removeCallbacksAndMessages(null);
             mHandler.postDelayed(mRoundOverRunnable, getTimeRemaining());
             View view = createPin();
             ((ViewGroup)rootView).addView(view);
@@ -368,32 +370,52 @@ public class MainActivity extends AppCompatActivity {
     private Runnable mRoundOverRunnable = new Runnable() {
         @Override
         public void run() {
+            Timber.d("Round over from main.");
             roundOver();
         }
     };
 
     private void roundOver() {
-        Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
-        mRoundOver = true;
-        PinMessage message = preparePinMessage();
-        boolean internetConnection = checkInternetConnection();
-        if(internetConnection) {
-            NetworkManager.postServer(message, new NetworkManager.Listener() {
-                @Override
-                public void onSuccess(GameStateMessage message) {
-                    Timber.d("Success!");
-                    reset();
-                }
+        if (!mRoundOver) {
+            Timber.d("Round over.");
+            Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
+            mRoundOver = true;
+            PinMessage message = preparePinMessage();
 
-                @Override
-                public void onError() {
-                    Timber.d("Failure.");
-                    reset();
-                }
-            });
+            boolean internetConnection = checkInternetConnection();
+            if (internetConnection) {
+                rootView.addView(mWaitingView);
+                NetworkManager.postServer(message, new NetworkManager.Listener() {
+                    @Override
+                    public void onSuccess(final GameStateMessage message) {
+                        Timber.d("Success!");
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                int resultId;
+                                if (message != null) {
+                                    resultId = message.totalScore >= 0 ? R.string.good_guys_won : R.string.bad_guys_won;
+                                } else {
+                                    resultId = R.string.error;
+                                }
+                                reset(resultId);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError() {
+                        Timber.d("Failure.");
+                        mHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                reset(R.string.error);
+                            }
+                        });
+                    }
+                });
+            }
         }
-
-        mWaitingView = getLayoutInflater().inflate(R.layout.widget_waiting, rootView, true);
     }
 
     private long getTimeRemaining() {
@@ -413,10 +435,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void reset() {
+    private void reset(int resultId) {
+        Timber.d("Resetting.");
         if (mWaitingView != null) {
             rootView.removeView(mWaitingView);
         }
+
+        Intent intent = new Intent(this, SignIn.class);
+        String result = getString(resultId);
+        intent.putExtra(SignIn.KEY_ROUND_RESULT, result);
+        startActivity(intent);
+        finish();
     }
 
 }
