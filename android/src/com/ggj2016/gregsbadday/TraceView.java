@@ -3,12 +3,16 @@ package com.ggj2016.gregsbadday;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -35,7 +39,7 @@ public class TraceView extends View {
     private ParticleSystem particleSystem;
     private Activity activity;
 
-    private static final int rectWidth = 20;
+    private static final int rectWidth = 50;
 
     private static final int pointOneLeft = 98;
     private static final int pointOneRight = pointOneLeft + rectWidth;
@@ -67,6 +71,9 @@ public class TraceView extends View {
     private RectF pointThreeRect;
     private RectF pointFourRect;
     private RectF pointFiveRect;
+
+    Bitmap backgroundBitmap;
+    Drawable tintedBackgroundDrawable;
 
     public TraceView(Context context) {
         this(context, null);
@@ -101,6 +108,14 @@ public class TraceView extends View {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(STROKE_WIDTH);
 
+        backgroundBitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.alpha_test);
+        tintedBackgroundDrawable = getResources().getDrawable(R.drawable.alpha_test);
+        if (tintedBackgroundDrawable != null) {
+            tintedBackgroundDrawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+            setBackground(tintedBackgroundDrawable);
+        }
+
         setupRects();
 
         if (context instanceof Activity) {
@@ -120,7 +135,7 @@ public class TraceView extends View {
 
     public void clearDrawing() {
         path.reset();
-
+        particleSystem.cancel();
         invalidate();
     }
 
@@ -151,9 +166,10 @@ public class TraceView extends View {
                 particleSystem.setRotationSpeedRange(90, 180);
                 particleSystem.setFadeOut(200, new AccelerateInterpolator());
                 particleSystem.emit((int) x, (int) y, 40);
-                return true;
+                break;
             case MotionEvent.ACTION_UP:
                 particleSystem.stopEmitting();
+                break;
             case MotionEvent.ACTION_MOVE:
                 resetDirtyRect(x, y);
 
