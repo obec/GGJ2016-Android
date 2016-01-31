@@ -286,9 +286,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
     @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
     protected void onOpenSandboxClicked(View view) {
 
