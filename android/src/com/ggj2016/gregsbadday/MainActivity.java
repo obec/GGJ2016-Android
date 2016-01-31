@@ -354,10 +354,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_TIME_UP) {
             roundOver();
-            Toast.makeText(this, "TIMES UP!", Toast.LENGTH_LONG);
         } else {
             mHandler.postDelayed(mRoundOverRunnable, getTimeRemaining());
-            Toast.makeText(this, "GOOD JOB!", Toast.LENGTH_LONG);
         }
     }
 
