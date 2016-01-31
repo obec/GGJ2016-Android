@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.open_sandbox)
     protected void onOpenSandboxClicked(View view) {
         Intent intent = new Intent(this, PuzzleSandbox.class);
+        intent.putExtra("CardType", TraceView.CardType.LOVE);
         startActivity(intent);
     }
 

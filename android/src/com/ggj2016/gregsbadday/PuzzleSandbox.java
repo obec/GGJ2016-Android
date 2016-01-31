@@ -26,7 +26,9 @@ public class PuzzleSandbox extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
         ButterKnife.bind(this);
-        traceView.setCardType(TraceView.CardType.DISRUPT);
+
+        TraceView.CardType cardType = (TraceView.CardType) getIntent().getSerializableExtra("CardType");
+        traceView.setCardType(cardType);
 
         // Variable for checking the connection status
         boolean internetConnection = false;
