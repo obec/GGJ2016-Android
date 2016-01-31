@@ -1,7 +1,6 @@
 package com.ggj2016.gregsbadday;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,9 +23,11 @@ public class PuzzleSandbox extends AppCompatActivity {
 
     public static final String KEY_TIME_REMAINING = "remaining";
     public static final String KEY_CARD_TYPE = "type";
-
     private Handler mHandler = new Handler();
-    private Bitmap bitmap = null;
+
+    public static final int RESULT_RUNE_COMPLETE = 0;
+    public static final int RESULT_TIME_UP = 1;
+
     private long mTimeRemaining;
 
     @Bind(R.id.trace_view) TraceView traceView;
@@ -69,8 +70,7 @@ public class PuzzleSandbox extends AppCompatActivity {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                setResult(MainActivity.RESULT_TIME_UP);
-                finish();
+                finishCardActivity(false);
             }
         }, mTimeRemaining);
     }
@@ -87,6 +87,12 @@ public class PuzzleSandbox extends AppCompatActivity {
             Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
             return false;
         }
+    }
+
+    public void finishCardActivity(boolean didWin) {
+        int result = didWin ? RESULT_RUNE_COMPLETE : RESULT_TIME_UP;
+        setResult(result);
+        finish();
     }
 
     @OnClick(R.id.clear_button)

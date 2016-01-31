@@ -19,7 +19,6 @@ import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Toast;
 
 import com.plattysoft.leonids.ParticleSystem;
 
@@ -42,8 +41,6 @@ public class TraceView extends View {
     private static final float STROKE_WIDTH = 15.0f;
     private static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
 
-    private static final int POINTS = 5;
-
     private final Paint paint = new Paint();
     private final Path path = new Path();
 
@@ -55,6 +52,12 @@ public class TraceView extends View {
 
     Bitmap backgroundMaskBitmap;
     Drawable backgroundDrawable;
+
+    private boolean tealPointChecked = false;
+    private boolean yellowPointChecked = false;
+    private boolean redPointChecked = false;
+    private boolean pinkPointChecked = false;
+    private boolean greenPointChecked = false;
 
     private Point windowSize = new Point();
 
@@ -153,6 +156,7 @@ public class TraceView extends View {
                 path.moveTo(x, y);
                 lastTouch.set(x, y);
                 particleSystem.emit((int) x, (int) y, 40);
+                checkCollision(x, y);
                 break;
             case MotionEvent.ACTION_UP:
                 particleSystem.stopEmitting();
@@ -172,19 +176,7 @@ public class TraceView extends View {
                 path.lineTo(x, y);
                 particleSystem.updateEmitPoint((int) x, (int) y);
 
-                float percentageX = Math.max(0, Math.min(0.999f, x / windowSize.x));
-                float percentageY = Math.max(0, Math.min(0.999f, y / windowSize.y));
-                float targetX = backgroundMaskBitmap.getWidth() * percentageX;
-                float targetY = backgroundMaskBitmap.getHeight() * percentageY;
-                int color = backgroundMaskBitmap.getPixel((int)targetX, (int)targetY);
-
-                //TODO COUNT DEM POINTS FOR SOME SORT OF WIN CONDITION
-                Region pinnedRegion = map.get(color);
-                if (pinnedRegion != null) {
-                    Timber.d("#%06X  %d", (0xFFFFFF & color), color);
-                    Toast.makeText(activity, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
-                }
-
+                checkCollision(x, y);
                 break;
             default:
                 return false;
@@ -199,6 +191,54 @@ public class TraceView extends View {
         lastTouch.set(x, y);
 
         return true;
+    }
+
+    private void checkCollision(float x, float y) {
+        float percentageX = Math.max(0, Math.min(0.999f, x / windowSize.x));
+        float percentageY = Math.max(0, Math.min(0.999f, y / windowSize.y));
+        float targetX = backgroundMaskBitmap.getWidth() * percentageX;
+        float targetY = backgroundMaskBitmap.getHeight() * percentageY;
+        int color = backgroundMaskBitmap.getPixel((int) targetX, (int) targetY);
+
+        Region pinnedRegion = map.get(color);
+        if (pinnedRegion != null) {
+            switch (pinnedRegion) {
+                case TEAL:
+                    Timber.d("TEAL CHECKED");
+                    tealPointChecked = true;
+                    break;
+                case YELLOW:
+                    Timber.d("YELLOW CHECKED");
+                    yellowPointChecked = true;
+                    break;
+                case RED:
+                    Timber.d("RED CHECKED");
+                    redPointChecked = true;
+                    break;
+                case PINK:
+                    Timber.d("PINK CHECKED");
+                    pinkPointChecked = true;
+                    break;
+                case GREEN:
+                    Timber.d("GREEN CHECKED");
+                    greenPointChecked = true;
+                    break;
+            }
+
+            boolean allChecked = allChecked();
+
+            if (allChecked) {
+                ((PuzzleSandbox) activity).finishCardActivity(true);
+            }
+        }
+    }
+
+    private boolean allChecked() {
+        return tealPointChecked &&
+                yellowPointChecked &&
+                redPointChecked &&
+                pinkPointChecked &&
+                greenPointChecked;
     }
 
     public enum CardType {

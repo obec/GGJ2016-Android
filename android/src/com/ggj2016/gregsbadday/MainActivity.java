@@ -12,10 +12,11 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.ggj2016.gregsbadday.messages.PinMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,16 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+
     private static final long SCALE_DURATION = 300L;
     private static final long ROUND_TIME = TimeUnit.SECONDS.toMillis(15);
-
-    @Bind(R.id.head) Button headButton;
-    @Bind(R.id.left_hand) Button leftHandButton;
-    @Bind(R.id.right_hand) Button rightHandButton;
-    @Bind(R.id.body) Button bodyButton;
-    @Bind(R.id.right_leg) Button rightLegButton;
-    @Bind(R.id.left_leg) Button leftLegButton;
     @Bind(R.id.pin) ImageView pin;
+    @Bind(R.id.second_pin) ImageView secondPin;
+    @Bind(R.id.third_pin) ImageView thirdPin;
     @Bind(R.id.test_view) View testView;
     @Bind(R.id.second_test_view) View secondTestView;
     @Bind(R.id.voodoo_target_map) ImageView colorWheel;
@@ -70,88 +67,116 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private List<View> viewList = new ArrayList();
+    private List<Score> scoreList = new ArrayList();
     private boolean isGood;
     private Point windowSize = new Point();
+
 
     private boolean mRoundOver;
 
     private Handler mHandler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        headButton.setTag(Region.HEAD);
-        leftHandButton.setTag(Region.LEFT_HAND);
-        rightHandButton.setTag(Region.RIGHT_HAND);
-        bodyButton.setTag(Region.BODY);
-        rightLegButton.setTag(Region.RIGHT_LEG);
-        leftLegButton.setTag(Region.LEFT_LEG);
         viewList.add(testView);
         viewList.add(secondTestView);
         final Bitmap bitmap = ((BitmapDrawable) colorWheel.getDrawable()).getBitmap();
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(windowSize);
+        Score scorePin1 = new Score();
+        Score scorePin2 = new Score();
+        Score scorePin3 = new Score();
+        pin.setTag(scorePin1);
+        secondPin.setTag(scorePin2);
+        thirdPin.setTag(scorePin3);
+        scoreList.add((Score) pin.getTag());
+        scoreList.add((Score) secondPin.getTag());
+        scoreList.add((Score)thirdPin.getTag());
 
-        pin.setOnTouchListener(new View.OnTouchListener() {
-            float deltaX;
-            float deltaY;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                float x = event.getRawX();
-                float y = event.getRawY();
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
-                        deltaX = x - lParams.leftMargin;
-                        deltaY = y - lParams.topMargin;
-                        onPinTouch(v);
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
-                        layoutParams.leftMargin = (int) (x - deltaX);
-                        layoutParams.topMargin = (int) (y - deltaY);
-                        pin.setLayoutParams(layoutParams);
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        PointF pinPoint = getPinPoint();
-                        Timber.d("X: %d, Y: %d", (int) pinPoint.x, (int) pinPoint.y);
-                        float percentageX = pinPoint.x / windowSize.x;
-                        float percentageY = pinPoint.y / windowSize.y;
-                        float targetX = bitmap.getWidth() * percentageX;
-                        float targetY = bitmap.getHeight() * percentageY;
-
-                        int color = bitmap.getPixel((int) targetX, (int) targetY);
-                        Timber.d("#%06X  %d", (0xFFFFFF & color), color);
-//                        for(View view: viewList) {
-//                            boolean pinOverView = isPinOverView(view, pinPoint);
-//                            Timber.d("Is the pin over the view? %b", pinOverView);
-//                            Toast.makeText(MainActivity.this, "Is pin over view? " + pinOverView, Toast.LENGTH_SHORT).show();
-//                        }
-                        Region pinnedRegion = map.get(color);
-                        if (pinnedRegion != null) {
-                            Toast.makeText(MainActivity.this, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
-                        }
-
-                        onPinDrop(v);
-
-                        break;
-                    default:
-                        return false;
-                }
-                return true;
-            }
-        });
+        pin.setOnTouchListener(new PinTouchListener(bitmap));
+        secondPin.setOnTouchListener(new PinTouchListener(bitmap));
+        thirdPin.setOnTouchListener(new PinTouchListener(bitmap));
 
         mRoundStartTime = System.currentTimeMillis();
         showRune();
     }
 
+
+    private class PinTouchListener implements View.OnTouchListener {
+
+        PinTouchListener(Bitmap bitmap) {
+            this.bitmap = bitmap;
+        }
+
+        Bitmap bitmap;
+        float deltaX;
+        float deltaY;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            float x = event.getRawX();
+            float y = event.getRawY();
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                    deltaX = x - lParams.leftMargin;
+                    deltaY = y - lParams.topMargin;
+                    lParams.leftMargin = (int) (v.getLeft());
+                    lParams.topMargin = (int) (v.getTop());
+                    lParams.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    lParams.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                    onPinTouch(v);
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) v.getLayoutParams();
+                    layoutParams.leftMargin = (int) (x - deltaX);
+                    layoutParams.topMargin = (int) (y - deltaY);
+                    v.setLayoutParams(layoutParams);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Log.d(TAG, String.format("Am I good? %b", isGood));
+                    PointF pinPoint = getPinPoint(v);
+                    Timber.d("X: %d, Y: %d", (int) pinPoint.x, (int) pinPoint.y);
+                    float percentageX = pinPoint.x / windowSize.x;
+                    float percentageY = pinPoint.y / windowSize.y;
+                    float targetX = bitmap.getWidth() * percentageX;
+                    float targetY = bitmap.getHeight() * percentageY;
+
+                    int color = bitmap.getPixel((int) targetX, (int) targetY);
+                    Timber.d("#%06X  %d", (0xFFFFFF & color), color);
+                    Region pinnedRegion = map.get(color);
+                    if (pinnedRegion != null) {
+                        Toast.makeText(MainActivity.this, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
+                        Object tag = v.getTag();
+                        if (tag instanceof Score) {
+                            ((Score) tag).setScore(pinnedRegion.name, 1);
+                            if (arePinsPlaced()) {
+                                preparePinMessage();
+                            }
+                        }
+                        v.setEnabled(false);
+
+                    }
+                    onPinDrop(v);
+
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+
+
+        }
+    }
+
     private boolean isPinOverView(View view, PointF pointF) {
-        PointF pinPoint = getPinPoint();
+        PointF pinPoint = getPinPoint(view);
         if (((pinPoint.x > view.getLeft()) && (pinPoint.x < view.getRight())) &&
                 ((pinPoint.y < view.getBottom()) && (pinPoint.y > view.getTop()))) {
             return true;
@@ -159,16 +184,69 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+    };
+    private boolean arePinsPlaced() {
+        boolean placed = true;
+        for (Score score : scoreList) {
+            placed = ((score.getScore() != 0) && (placed));
+        }
+        return placed;
     }
 
-    private PointF getPinPoint() {
-        return new PointF(pin.getX(), pin.getY() + pin.getHeight());
+    private PinMessage preparePinMessage(){
+        int head = 0;
+        int lArm = 0;
+        int rArm = 0;
+        int body = 0;
+        int lLeg = 0;
+        int rLeg = 0;
+        if (arePinsPlaced()) {
+            for(Score score: scoreList) {
+                if (score.getBodyPart().equals(Region.HEAD.name)) {
+                    head = head + score.getScore();
+                }
+                else if (score.getBodyPart().equals(Region.LEFT_HAND.name)) {
+                    lArm = lArm + score.getScore();
+                }
+                else if (score.getBodyPart().equals(Region.RIGHT_HAND.name)) {
+                    rArm = rArm + score.getScore();
+                }
+                else if (score.getBodyPart().equals(Region.BODY.name)) {
+                    body = body + score.getScore();
+                }
+                else if (score.getBodyPart().equals(Region.LEFT_LEG.name)) {
+                    lLeg = lLeg + score.getScore();
+                }
+                else if (score.getBodyPart().equals(Region.RIGHT_LEG.name)) {
+                    rLeg = rLeg + score.getScore();
+                }
+            }
+            PinMessage scoreMessage = new PinMessage(head,body,rArm,lArm,rLeg,lLeg);
+        }
+        return new PinMessage(head,body,rArm,lArm,rLeg,lLeg);
+    }
+
+//    private boolean isPinOverView(View view, PointF pointF){
+//        PointF pinPoint = getPinPoint(view);
+//        if (((pinPoint.x > view.getLeft()) && (pinPoint.x < view.getRight())) &&
+//                ((pinPoint.y < view.getBottom()) && (pinPoint.y > view.getTop()))){
+//            return true;
+//        }
+//        else{
+//            return false;
+//        }
+//
+//    }
+    private static PointF getPinPoint(View view){
+        return new PointF(view.getX(), view.getY() + view.getHeight());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         pin.bringToFront();
+        secondPin.bringToFront();
+        thirdPin.bringToFront();
     }
 
     @Override
@@ -186,35 +264,9 @@ public class MainActivity extends AppCompatActivity {
         isGood = checked;
     }
 
-    @OnClick({R.id.head, R.id.left_hand, R.id.right_hand, R.id.body, R.id.right_leg, R.id.left_leg})
-    protected void onRegionClicked(View view) {
-        Log.d(TAG, String.format("Am I good? %b", isGood));
-        Region region = (Region) view.getTag();
-        switch (region) {
-            case HEAD:
-                Log.d("main", "headClicked");
-                break;
-            case LEFT_HAND:
-                Log.d("main", "leftHandClicked");
-                break;
-            case RIGHT_HAND:
-                Log.d("main", "rightHandClicked");
-                break;
-            case BODY:
-                Log.d("main", "bodyClicked");
-                break;
-            case RIGHT_LEG:
-                Log.d("main", "rightLegClicked");
-                break;
-            case LEFT_LEG:
-                Log.d("main", "leftLegClicked");
-                break;
-        }
-
-    }
-
     @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
     protected void onOpenSandboxClicked(View view) {
+
         Intent intent = new Intent(this, PuzzleSandbox.class);
 
         switch (view.getId()) {
@@ -232,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     private enum Region {
@@ -255,7 +307,6 @@ public class MainActivity extends AppCompatActivity {
         public String toString() {
             return String.format("%s #%06X  %d", name, (0xFFFFFF & color), color);
         }
-
     }
 
     private void onPinTouch(View view) {
@@ -265,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
                 .setDuration(SCALE_DURATION)
                 .start();
     }
+
 
     private void onPinDrop(View view) {
         view.animate()
@@ -322,4 +374,5 @@ public class MainActivity extends AppCompatActivity {
     private long getTimeRemaining() {
         return ROUND_TIME - (System.currentTimeMillis() - mRoundStartTime);
     }
+
 }
