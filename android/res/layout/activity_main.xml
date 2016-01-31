@@ -90,15 +90,6 @@
         android:layout_below="@id/right_leg"
         android:visibility="gone"/>
 
-    <Button
-        android:id="@+id/open_libgdx_sandbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/open_libgdx_sandbox"
-        android:layout_above="@+id/open_sandbox"
-        android:layout_centerHorizontal="true"/>
-
     <ImageView
         android:id="@+id/voodoo_target_map"
         android:layout_width="wrap_content"
