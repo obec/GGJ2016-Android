@@ -382,12 +382,18 @@ public class MainActivity extends AppCompatActivity {
                 rootView.addView(mWaitingView);
                 NetworkManager.postServer(message, new NetworkManager.Listener() {
                     @Override
-                    public void onSuccess(GameStateMessage message) {
+                    public void onSuccess(final GameStateMessage message) {
                         Timber.d("Success!");
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                reset();
+                                int resultId;
+                                if (message != null) {
+                                    resultId = message.totalScore >= 0 ? R.string.good_guys_won : R.string.bad_guys_won;
+                                } else {
+                                    resultId = R.string.error;
+                                }
+                                reset(resultId);
                             }
                         });
                     }
@@ -398,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
                         mHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                reset();
+                                reset(R.string.error);
                             }
                         });
                     }
@@ -424,11 +430,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void reset() {
+    private void reset(int resultId) {
         Timber.d("Resetting.");
         if (mWaitingView != null) {
             rootView.removeView(mWaitingView);
         }
+
+        Intent intent = new Intent(this, SignIn.class);
+        String result = getString(resultId);
+        intent.putExtra(SignIn.KEY_ROUND_RESULT, result);
+        startActivity(intent);
+        finish();
     }
 
 }

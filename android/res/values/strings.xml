@@ -9,7 +9,11 @@
     <string name="button_body">Body</string>
     <string name="button_right_leg">Right Leg</string>
     <string name="button_left_leg">Left Leg</string>
-    <string name="button_sign_in">Sign In</string>
+    <string name="button_play">Play</string>
+    <string name="name">Name</string>
+    <string name="error">Error submitting score.</string>
+    <string name="good_guys_won">Good triumphs!</string>
+    <string name="bad_guys_won">Evil prevails!</string>
     <string name="open_sandbox_fire">Fire Card</string>
     <string name="open_sandbox_love">Love Card</string>
     <string name="open_sandbox_progression">Progression</string>
