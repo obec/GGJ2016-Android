@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.second_test_view) View secondTestView;
     @Bind(R.id.voodoo_target_map) ImageView colorWheel;
 
+    TraceView.CardType[] runeCards = TraceView.CardType.values();
+    int runeCardIndex = 0;
+
     private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
     static {
         map.put(Region.HEAD.color, Region.HEAD);
@@ -272,6 +275,24 @@ public class MainActivity extends AppCompatActivity {
                 .scaleYBy(-0.2f)
                 .setDuration(SCALE_DURATION)
                 .start();
+    }
+
+    private void showRune() {
+        TraceView.CardType type = runeCards[runeCardIndex];
+        runeCardIndex++;
+
+        if (runeCardIndex >= runeCards.length) {
+            runeCardIndex = 0;
+        }
+
+        Intent intent = new Intent(this, PuzzleSandbox.class);
+        intent.putExtra("CardType", type);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.progression)
+    protected void onProgresion(View view) {
+        showRune();
     }
 
 }
