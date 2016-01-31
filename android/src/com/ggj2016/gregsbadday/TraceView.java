@@ -87,8 +87,15 @@ public class TraceView extends View {
 
         if (context instanceof Activity) {
             activity = (Activity) context;
+
             Display display = activity.getWindowManager().getDefaultDisplay();
             display.getSize(windowSize);
+
+            particleSystem = new ParticleSystem(activity, 100, R.drawable.star_white, 800);
+            particleSystem.setScaleRange(0.7f, 1.3f);
+            particleSystem.setSpeedRange(0.05f, 0.1f);
+            particleSystem.setRotationSpeedRange(90, 180);
+            particleSystem.setFadeOut(200, new AccelerateInterpolator());
         } else {
             throw new IllegalStateException("try again with an activity context");
         }
@@ -114,11 +121,6 @@ public class TraceView extends View {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(x, y);
                 lastTouch.set(x, y);
-                particleSystem = new ParticleSystem(activity, 100, R.drawable.star_white, 800);
-                particleSystem.setScaleRange(0.7f, 1.3f);
-                particleSystem.setSpeedRange(0.05f, 0.1f);
-                particleSystem.setRotationSpeedRange(90, 180);
-                particleSystem.setFadeOut(200, new AccelerateInterpolator());
                 particleSystem.emit((int) x, (int) y, 40);
                 break;
             case MotionEvent.ACTION_UP:
