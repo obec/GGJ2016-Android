@@ -139,14 +139,17 @@ public class NetworkManager {
             httpConnection.setDoOutput(true);
             httpConnection.setRequestMethod("POST");
             httpConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            Timber.d("Connecting");
             httpConnection.connect();
 
             String serializedPinMessage = mGson.toJson(pinMessage);
 
+            Timber.d("Getting output stream");
             OutputStream outputStream = httpConnection.getOutputStream();
             outputStream.write(serializedPinMessage.getBytes("UTF-8"));
             outputStream.flush();
 
+            Timber.d("Getting response code");
             responseCode = httpConnection.getResponseCode();
 
             // Check to see if there is a response 200 from the server
@@ -154,6 +157,8 @@ public class NetworkManager {
                 inputStream = httpConnection.getInputStream();
                 Log.d("Response Code", "" + responseCode);
                 Log.d("HTTP Post", "OK");
+            } else {
+                Timber.w("Unexpected response code: %d", responseCode);
             }
         } catch (IOException e) {
             Timber.e(e, "Error posting pin message.");
@@ -162,4 +167,5 @@ public class NetworkManager {
         // Return the stream from the server
         return inputStream;
     }
+
 }
