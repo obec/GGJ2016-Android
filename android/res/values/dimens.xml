@@ -2,5 +2,7 @@
 <resources>
 
     <dimen name="touch_point">50dp</dimen>
+    <dimen name="pin_height">75dp</dimen>
+    <dimen name="pin_width">75dp</dimen>
 
 </resources>

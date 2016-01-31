@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.ggj2016.gregsbadday.messages.GameStateMessage;
 import com.ggj2016.gregsbadday.messages.PinMessage;
 
 import java.util.ArrayList;
@@ -43,12 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     private static final long SCALE_DURATION = 300L;
     private static final long ROUND_TIME = TimeUnit.SECONDS.toMillis(15);
-    @Bind(R.id.pin) ImageView pin;
-    @Bind(R.id.second_pin) ImageView secondPin;
-    @Bind(R.id.third_pin) ImageView thirdPin;
     @Bind(R.id.test_view) View testView;
     @Bind(R.id.second_test_view) View secondTestView;
     @Bind(R.id.voodoo_target_map) ImageView colorWheel;
+    @Bind(R.id.root_view) RelativeLayout rootView;
 
     private long mRoundStartTime;
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler mHandler = new Handler();
 
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,22 +85,10 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         viewList.add(testView);
         viewList.add(secondTestView);
-        final Bitmap bitmap = ((BitmapDrawable) colorWheel.getDrawable()).getBitmap();
         Display display = getWindowManager().getDefaultDisplay();
         display.getSize(windowSize);
-        Score scorePin1 = new Score();
-        Score scorePin2 = new Score();
-        Score scorePin3 = new Score();
-        pin.setTag(scorePin1);
-        secondPin.setTag(scorePin2);
-        thirdPin.setTag(scorePin3);
-        scoreList.add((Score) pin.getTag());
-        scoreList.add((Score) secondPin.getTag());
-        scoreList.add((Score)thirdPin.getTag());
 
-        pin.setOnTouchListener(new PinTouchListener(bitmap));
-        secondPin.setOnTouchListener(new PinTouchListener(bitmap));
-        thirdPin.setOnTouchListener(new PinTouchListener(bitmap));
+        bitmap = ((BitmapDrawable) colorWheel.getDrawable()).getBitmap();
 
         mRoundStartTime = System.currentTimeMillis();
         showRune();
@@ -156,9 +145,6 @@ public class MainActivity extends AppCompatActivity {
                         Object tag = v.getTag();
                         if (tag instanceof Score) {
                             ((Score) tag).setScore(pinnedRegion.name, 1);
-                            if (arePinsPlaced()) {
-                                preparePinMessage();
-                            }
                         }
                         v.setEnabled(false);
 
@@ -173,6 +159,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private View createPin(){
+        ImageView newPin = new ImageView(this);
+        newPin.setImageResource(R.drawable.pin);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams
+                                                (getResources().getDimensionPixelSize(R.dimen.pin_width),
+                                                getResources().getDimensionPixelSize(R.dimen.pin_height));
+        newPin.setLayoutParams(lp);
+        newPin.setOnTouchListener(new PinTouchListener(bitmap));
+        Score score = new Score();
+        newPin.setTag(score);
+        scoreList.add((Score)newPin.getTag());
+        return newPin;
     }
 
     private boolean isPinOverView(View view, PointF pointF) {
@@ -221,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
                     rLeg = rLeg + score.getScore();
                 }
             }
-            PinMessage scoreMessage = new PinMessage(head,body,rArm,lArm,rLeg,lLeg);
         }
         return new PinMessage(head,body,rArm,lArm,rLeg,lLeg);
     }
@@ -244,20 +243,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        pin.bringToFront();
-        secondPin.bringToFront();
-        thirdPin.bringToFront();
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) {
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) pin.getLayoutParams();
-            lp.leftMargin = (int) (windowSize.x - (pin.getWidth() * 1.2));
-            lp.topMargin = (int) (windowSize.y - (pin.getHeight() * 1.5));
-            pin.setLayoutParams(lp);
-        }
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        if (hasFocus) {
+//            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) pin.getLayoutParams();
+//            lp.leftMargin = (int) (windowSize.x - (pin.getWidth() * 1.2));
+//            lp.topMargin = (int) (windowSize.y - (pin.getHeight() * 1.5));
+//            pin.setLayoutParams(lp);
+//        }
+//    }
 
     @OnCheckedChanged(R.id.good_evil)
     protected void onGoodEvilChanged(boolean checked) {
@@ -361,6 +357,8 @@ public class MainActivity extends AppCompatActivity {
             roundOver();
         } else {
             mHandler.postDelayed(mRoundOverRunnable, getTimeRemaining());
+            View view = createPin();
+            ((ViewGroup)rootView).addView(view);
         }
     }
 
@@ -374,6 +372,18 @@ public class MainActivity extends AppCompatActivity {
     private void roundOver() {
         Toast.makeText(this, "Times up!", Toast.LENGTH_SHORT).show();
         mRoundOver = true;
+        PinMessage message = preparePinMessage();
+        NetworkManager.postServer(message, new NetworkManager.Listener() {
+            @Override
+            public void onSuccess(GameStateMessage message) {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     private long getTimeRemaining() {
