@@ -9,7 +9,7 @@ public class PinMessage {
     private int leg_right;
     private int leg_left;
 
-    PinMessage(int head, int body, int armRight, int armLeft, int legRight, int legLeft) {
+    public PinMessage(int head, int body, int armRight, int armLeft, int legRight, int legLeft) {
         this.head = head;
         this.body = body;
         this.arm_right = armRight;

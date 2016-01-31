@@ -35,7 +35,7 @@ public class PuzzleSandbox extends AppCompatActivity {
         // Check connection with the server
         internetConnection = checkInternetConnection();
         if(internetConnection) {
-            PinMessage message = new PinMessage(0, 0, 0, 0);
+            PinMessage message = new PinMessage(0, 0, 0, 0, 0, 0);
             NetworkManager.postServer(message, new NetworkManager.Listener() {
                 @Override
                 public void onSuccess(GameStateMessage message) {
