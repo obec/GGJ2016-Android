@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
                         Object tag = v.getTag();
                         if (tag instanceof Score) {
-                            ((Score) tag).setScore(pinnedRegion.name, 1);
+                            ((Score) tag).setScore(pinnedRegion.name, isGood ? 1 : -1);
                         }
                         v.setEnabled(false);
                         showRune();
