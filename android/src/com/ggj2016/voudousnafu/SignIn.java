@@ -1,4 +1,4 @@
-package com.ggj2016.gregsbadday;
+package com.ggj2016.voudousnafu;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+
+import com.ggj2016.gregsbadday.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

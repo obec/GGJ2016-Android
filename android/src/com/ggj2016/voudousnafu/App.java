@@ -1,4 +1,4 @@
-package com.ggj2016.gregsbadday;
+package com.ggj2016.voudousnafu;
 
 import android.app.Application;
 import android.content.Context;

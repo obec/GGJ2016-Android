@@ -1,4 +1,4 @@
-package com.ggj2016.gregsbadday;
+package com.ggj2016.voudousnafu;
 
 /**
  * Created by Sami on 1/30/16.

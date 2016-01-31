@@ -1,4 +1,4 @@
-package com.ggj2016.gregsbadday.messages;
+package com.ggj2016.voudousnafu.messages;
 
 import com.google.gson.annotations.SerializedName;
 

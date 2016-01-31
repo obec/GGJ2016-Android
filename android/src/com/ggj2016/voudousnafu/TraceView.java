@@ -1,4 +1,4 @@
-package com.ggj2016.gregsbadday;
+package com.ggj2016.voudousnafu;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
+import com.ggj2016.gregsbadday.R;
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.HashMap;

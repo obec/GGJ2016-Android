@@ -12,7 +12,7 @@
         android:layout_alignParentBottom="true"
         android:text="@string/clear_button_text"/>
 
-    <com.ggj2016.gregsbadday.TraceView
+    <com.ggj2016.voudousnafu.TraceView
         android:id="@+id/trace_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

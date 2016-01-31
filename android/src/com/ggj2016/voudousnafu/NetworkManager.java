@@ -1,9 +1,9 @@
-package com.ggj2016.gregsbadday;
+package com.ggj2016.voudousnafu;
 
 import android.util.Log;
 
-import com.ggj2016.gregsbadday.messages.GameStateMessage;
-import com.ggj2016.gregsbadday.messages.PinMessage;
+import com.ggj2016.voudousnafu.messages.GameStateMessage;
+import com.ggj2016.voudousnafu.messages.PinMessage;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;

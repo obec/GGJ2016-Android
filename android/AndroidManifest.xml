@@ -12,16 +12,16 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/GdxTheme"
-        android:name=".App">
+        android:name="com.ggj2016.voudousnafu.App">
 
         <activity
-            android:name="com.ggj2016.gregsbadday.AndroidLauncher"
+            android:name="com.ggj2016.voudousnafu.AndroidLauncher"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
 
         <activity
-            android:name=".SignIn"
+            android:name="com.ggj2016.voudousnafu.SignIn"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,13 +31,13 @@
 
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.ggj2016.voudousnafu.MainActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="sensorPortrait">
         </activity>
 
         <activity
-            android:name=".PuzzleSandbox"
+            android:name="com.ggj2016.voudousnafu.PuzzleSandbox"
             android:theme="@style/AppTheme"/>
 
     </application>

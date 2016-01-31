@@ -1,4 +1,4 @@
-package com.ggj2016.gregsbadday;
+package com.ggj2016.voudousnafu;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,8 +18,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.ggj2016.gregsbadday.messages.GameStateMessage;
-import com.ggj2016.gregsbadday.messages.PinMessage;
+import com.ggj2016.gregsbadday.R;
+import com.ggj2016.voudousnafu.messages.GameStateMessage;
+import com.ggj2016.voudousnafu.messages.PinMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.ggj2016.gregsbadday;
+package com.ggj2016.voudousnafu;
 
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.ggj2016.gregsbadday.MainGame;
 
 public class AndroidLauncher extends AndroidApplication implements ApplicationListener {
 
