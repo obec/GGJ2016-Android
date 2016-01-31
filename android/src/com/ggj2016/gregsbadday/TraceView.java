@@ -139,15 +139,15 @@ public class TraceView extends View {
                 path.lineTo(x, y);
                 particleSystem.updateEmitPoint((int) x, (int) y);
 
-                float percentageX = x / windowSize.x;
-                float percentageY = y/ windowSize.y;
+                float percentageX = Math.max(0, Math.min(0.999f, x / windowSize.x));
+                float percentageY = Math.max(0, Math.min(0.999f, y / windowSize.y));
                 float targetX = backgroundBitmap.getWidth() * percentageX;
                 float targetY = backgroundBitmap.getHeight() * percentageY;
                 int color = backgroundBitmap.getPixel((int)targetX, (int)targetY);
                 Timber.d("#%06X  %d", (0xFFFFFF & color), color);
 
                 //TODO COUNT DEM POINTS
-                
+
                 break;
             default:
                 return false;
