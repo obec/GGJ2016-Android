@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,9 +34,13 @@ import timber.log.Timber;
  */
 public class MainActivity extends AppCompatActivity {
 
+    public static final int RESULT_RUNE_COMPLETE = 0;
+    public static final int RESULT_TIME_UP = 1;
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final long SCALE_DURATION = 300L;
+    private static final long ROUND_TIME = TimeUnit.SECONDS.toMillis(15);
 
     @Bind(R.id.head) Button headButton;
     @Bind(R.id.left_hand) Button leftHandButton;
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.test_view) View testView;
     @Bind(R.id.second_test_view) View secondTestView;
     @Bind(R.id.voodoo_target_map) ImageView colorWheel;
+
+    private long mRoundStartTime;
 
     TraceView.CardType[] runeCards = TraceView.CardType.values();
     int runeCardIndex = 0;
@@ -61,12 +68,13 @@ public class MainActivity extends AppCompatActivity {
         map.put(Region.RIGHT_LEG.color, Region.RIGHT_LEG);
     }
 
-
-
     private List<View> viewList = new ArrayList();
     private boolean isGood;
     private Point windowSize = new Point();
 
+    private boolean mRoundOver;
+
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +164,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         pin.bringToFront();
+
+        mRoundStartTime = System.currentTimeMillis();
+        showRune();
     }
 
     @Override
@@ -206,16 +217,16 @@ public class MainActivity extends AppCompatActivity {
 
         switch (view.getId()) {
             case R.id.open_sandbox_protect:
-                intent.putExtra("CardType", TraceView.CardType.PROTECTION);
+                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.PROTECTION);
                 break;
             case R.id.open_sandbox_disrupt:
-                intent.putExtra("CardType", TraceView.CardType.DISRUPT);
+                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.DISRUPT);
                 break;
             case R.id.open_sandbox_fire:
-                intent.putExtra("CardType", TraceView.CardType.FIRE);
+                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.FIRE);
                 break;
             case R.id.open_sandbox_love:
-                intent.putExtra("CardType", TraceView.CardType.LOVE);
+                intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, TraceView.CardType.LOVE);
                 break;
         }
 
@@ -244,23 +255,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
-        Rect pinRect = new Rect();
-        pin.getGlobalVisibleRect(pinRect);
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-
-
-
-        }
-
-
-        return true;
-    }
-
     private void onPinTouch(View view) {
         view.animate()
                 .scaleXBy(0.2f)
@@ -286,8 +280,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, PuzzleSandbox.class);
-        intent.putExtra("CardType", type);
-        startActivity(intent);
+        intent.putExtra(PuzzleSandbox.KEY_CARD_TYPE, type);
+        startActivityForResult(intent, 0);
     }
 
     @OnClick(R.id.progression)
@@ -295,4 +289,12 @@ public class MainActivity extends AppCompatActivity {
         showRune();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_TIME_UP) {
+            mRoundOver = true;
+        }
+    }
 }

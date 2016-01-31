@@ -17,6 +17,10 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 public class PuzzleSandbox extends AppCompatActivity {
+
+    public static final String KEY_TIME_REMAINING = "remaining";
+    public static final String KEY_CARD_TYPE = "type";
+
     private Bitmap bitmap = null;
 
     @Bind(R.id.trace_view) TraceView traceView;
@@ -27,7 +31,7 @@ public class PuzzleSandbox extends AppCompatActivity {
         setContentView(R.layout.activity_puzzle);
         ButterKnife.bind(this);
 
-        TraceView.CardType cardType = (TraceView.CardType) getIntent().getSerializableExtra("CardType");
+        TraceView.CardType cardType = (TraceView.CardType) getIntent().getSerializableExtra(KEY_CARD_TYPE);
         traceView.setCardType(cardType);
 
         // Variable for checking the connection status
