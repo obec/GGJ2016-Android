@@ -70,8 +70,7 @@ public class PuzzleSandbox extends AppCompatActivity {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                setResult(MainActivity.RESULT_TIME_UP);
-                finish();
+                finishCardActivity(false);
             }
         }, mTimeRemaining);
     }

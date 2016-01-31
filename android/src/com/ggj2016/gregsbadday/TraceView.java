@@ -25,6 +25,8 @@ import com.plattysoft.leonids.ParticleSystem;
 import java.util.HashMap;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class TraceView extends View {
 
     private static Map<Integer, Region> map = new HashMap<>(Region.values().length);
@@ -202,18 +204,23 @@ public class TraceView extends View {
         if (pinnedRegion != null) {
             switch (pinnedRegion) {
                 case TEAL:
+                    Timber.d("TEAL CHECKED");
                     tealPointChecked = true;
                     break;
                 case YELLOW:
+                    Timber.d("YELLOW CHECKED");
                     yellowPointChecked = true;
                     break;
                 case RED:
+                    Timber.d("RED CHECKED");
                     redPointChecked = true;
                     break;
                 case PINK:
+                    Timber.d("PINK CHECKED");
                     pinkPointChecked = true;
                     break;
                 case GREEN:
+                    Timber.d("GREEN CHECKED");
                     greenPointChecked = true;
                     break;
             }

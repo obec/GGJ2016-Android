@@ -260,31 +260,6 @@ public class MainActivity extends AppCompatActivity {
         isGood = checked;
     }
 
-    private enum Region{
-        HEAD("Head", -9219073),
-        LEFT_HAND("Left hand", -14287090),
-        RIGHT_HAND("Right hand", -65536),
-        BODY("Body", -15840001),
-        RIGHT_LEG("Right leg",-14066),
-        LEFT_LEG("Left leg", -61711);
-
-        int color;
-        String name;
-        Region(String name, int color) {
-            this.color = color;
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s #%06X  %d", name, (0xFFFFFF & color), color);
-
-        }
-    }
-
-
-
-
     @OnClick({R.id.open_sandbox_protect, R.id.open_sandbox_disrupt, R.id.open_sandbox_fire, R.id.open_sandbox_love})
     protected void onOpenSandboxClicked(View view) {
 
@@ -305,10 +280,30 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
+    private enum Region {
+        HEAD("Head", -8430081),
+        LEFT_HAND("Left hand", -14024950),
+        RIGHT_HAND("Right hand", -64512),
+        BODY("Body", -15772161),
+        RIGHT_LEG("Right leg", -12278),
+        LEFT_LEG("Left leg", -63245);
 
+        int color;
+        String name;
+
+        Region(String name, int color) {
+            this.color = color;
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s #%06X  %d", name, (0xFFFFFF & color), color);
+        }
+    }
 
     private void onPinTouch(View view) {
         view.animate()
