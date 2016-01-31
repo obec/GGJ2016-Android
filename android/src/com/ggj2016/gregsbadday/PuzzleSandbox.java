@@ -27,13 +27,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import android.view.View;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class PuzzleSandbox extends AppCompatActivity {
     private Bitmap bitmap = null;
+
+    @Bind(R.id.trace_view) TraceView traceView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_puzzle);
+        ButterKnife.bind(this);
 
         // Variable for checking the connection status
         boolean internetConnection = false;
@@ -223,5 +232,10 @@ public class PuzzleSandbox extends AppCompatActivity {
 
         // Return the stream from the server
         return inputStream;
+    }
+
+    @OnClick(R.id.clear_button)
+    void onClearButtonClicked(View view) {
+        traceView.clearDrawing();
     }
 }

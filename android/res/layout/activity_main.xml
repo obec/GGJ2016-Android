@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
     <Switch
         android:id="@+id/good_evil"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"/>
 
     <Button
         android:id="@+id/head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_head"
-        android:layout_gravity="center_horizontal" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/good_evil"/>
 
     <Button
         android:id="@+id/left_hand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_left_hand" />
+        android:text="@string/button_left_hand"
+        android:layout_below="@+id/head"
+        android:layout_alignParentRight="true"/>
 
     <Button
         android:id="@+id/right_hand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_right_hand"
-        android:layout_gravity="right" />
+        android:layout_below="@+id/head"
+        android:layout_alignParentLeft="true"/>
 
     <Button
         android:id="@+id/body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_body"
-        android:layout_gravity="center_horizontal" />
+        android:layout_below="@+id/left_hand"
+        android:layout_centerHorizontal="true"/>
 
 
     <Button
@@ -42,19 +49,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_right_leg"
-        android:layout_gravity="right" />
+        android:layout_below="@+id/body"
+        android:layout_alignParentLeft="true"/>
 
     <Button
         android:id="@+id/left_leg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_left_leg" />
+        android:text="@string/button_left_leg"
+        android:layout_below="@id/body"
+        android:layout_alignParentRight="true"/>
 
     <Button
         android:id="@+id/open_sandbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/open_sandbox"/>
+        android:text="@string/open_sandbox"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/pin"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/pin"/>
+
+    <View
+        android:id="@+id/test_view"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="#FF0000"
+        android:layout_centerInParent="true"/>
+
+    <View
+        android:id="@+id/second_test_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="#FF0000"
+        android:layout_below="@id/right_leg"/>
+
+    <Button
+        android:id="@+id/open_libgdx_sandbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/open_libgdx_sandbox"
+        android:layout_above="@+id/open_sandbox"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageView
+        android:id="@+id/color_wheel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/color_wheel" />
+
+
+</RelativeLayout>

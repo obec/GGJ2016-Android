@@ -1,16 +1,28 @@
 package com.ggj2016.gregsbadday;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 /**
  * Created by Sami on 1/29/16.
@@ -25,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.body) Button bodyButton;
     @Bind(R.id.right_leg) Button rightLegButton;
     @Bind(R.id.left_leg) Button leftLegButton;
+    @Bind(R.id.pin) ImageView pin;
+    @Bind(R.id.test_view) View testView;
+    @Bind(R.id.second_test_view) View secondTestView;
+    @Bind(R.id.color_wheel) ImageView colorWheel;
+
+
+
+    private List<View> viewList = new ArrayList();
     private boolean isGood;
 
 
@@ -39,6 +59,70 @@ public class MainActivity extends AppCompatActivity {
         bodyButton.setTag(Region.BODY);
         rightLegButton.setTag(Region.RIGHT_LEG);
         leftLegButton.setTag(Region.LEFT_LEG);
+        viewList.add(testView);
+        viewList.add(secondTestView);
+        final Bitmap bitmap = ((BitmapDrawable)colorWheel.getDrawable()).getBitmap();
+
+        pin.setOnTouchListener(new View.OnTouchListener() {
+            float deltaX;
+            float deltaY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                float x = event.getRawX();
+                float y = event.getRawY();
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
+                        deltaX = x - lParams.leftMargin;
+                        deltaY = y - lParams.topMargin;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) pin.getLayoutParams();
+                        layoutParams.leftMargin = (int) (x - deltaX);
+                        layoutParams.topMargin = (int) (y - deltaY);
+                        pin.setLayoutParams(layoutParams);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        PointF pinPoint = getPinPoint();
+                        Timber.d("X: %d, Y: %d", (int) pinPoint.x, (int) pinPoint.y);
+
+                        int color = bitmap.getPixel((int)pinPoint.x, (int)pinPoint.y);
+                        Timber.d("#%06X", (0xFFFFFF & color));
+                        for(View view: viewList) {
+                            boolean pinOverView = isPinOverView(view, pinPoint);
+                            Timber.d("Is the pin over the view? %b", pinOverView);
+                            Toast.makeText(MainActivity.this, "Is pin over view? " + pinOverView, Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+                    default:
+                        return false;
+                }
+                return true;
+            }
+        });
+    }
+    private boolean isPinOverView(View view, PointF pointF){
+        PointF pinPoint = getPinPoint();
+        if (((pinPoint.x > view.getLeft()) && (pinPoint.x < view.getRight())) &&
+                ((pinPoint.y < view.getBottom()) && (pinPoint.y > view.getTop()))){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+    private PointF getPinPoint(){
+        return new PointF(pin.getX(), pin.getY() + pin.getHeight());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        pin.bringToFront();
     }
 
     @OnCheckedChanged (R.id.good_evil)
@@ -79,6 +163,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.open_libgdx_sandbox)
+    protected void onOpenLibGdxSandbox(View view) {
+        Intent intent = new Intent(this, AndroidLauncher.class);
+        startActivity(intent);
+    }
+
     private enum Region{
         HEAD,
         LEFT_HAND,
@@ -88,4 +178,21 @@ public class MainActivity extends AppCompatActivity {
         LEFT_LEG,
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+        Rect pinRect = new Rect();
+        pin.getGlobalVisibleRect(pinRect);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+
+
+
+        }
+
+
+        return true;
+
+    }
 }

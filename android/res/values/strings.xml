@@ -11,5 +11,7 @@
     <string name="button_left_leg">Left Leg</string>
     <string name="button_sign_in">Sign In</string>
     <string name="open_sandbox">Open Sandbox</string>
+    <string name="open_libgdx_sandbox">LibGDX Sandbox</string>
+    <string name="clear_button_text">Clear Drawing</string>
 
 </resources>

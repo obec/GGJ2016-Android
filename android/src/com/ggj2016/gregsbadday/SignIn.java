@@ -35,5 +35,6 @@ public class SignIn extends AppCompatActivity {
         Log.d(TAG, String.format("Login text: %s", signInText.getText()));
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }
