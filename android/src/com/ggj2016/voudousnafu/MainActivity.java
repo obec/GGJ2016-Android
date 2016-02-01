@@ -148,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
                     Timber.d("#%06X  %d", (0xFFFFFF & color), color);
                     Region pinnedRegion = map.get(color);
                     if (pinnedRegion != null) {
-                        Toast.makeText(MainActivity.this, pinnedRegion.toString(), Toast.LENGTH_SHORT).show();
+                        Timber.d("Pinned region: %s", pinnedRegion);
+
                         Object tag = v.getTag();
                         if (tag instanceof Score) {
                             ((Score) tag).setScore(pinnedRegion.name, isGood ? 1 : -1);
@@ -427,10 +428,10 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager connection = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
         if (connection.getActiveNetworkInfo() != null) {
-            Toast.makeText(this, " Connected ", Toast.LENGTH_SHORT).show();
+            Timber.d("Connected.");
             return true;
         } else {
-            Toast.makeText(this, " Disconnected ", Toast.LENGTH_SHORT).show();
+            Timber.d("Disconnected.");
             return false;
         }
     }
