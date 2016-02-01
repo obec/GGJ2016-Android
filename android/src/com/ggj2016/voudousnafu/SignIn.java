@@ -6,9 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.ggj2016.gregsbadday.R;
@@ -26,8 +24,6 @@ public class SignIn extends AppCompatActivity {
 
     private static final String TAG = SignIn.class.getSimpleName();
 
-    @Bind(R.id.sign_in) Button signInButton;
-    @Bind(R.id.good_evil) Switch goodEvil;
     @Bind(R.id.sign_in_text) EditText signInText;
     @Bind(R.id.round_result) TextView roundResult;
 
@@ -47,11 +43,11 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.sign_in)
-    protected void onSignInClicked(){
+    @OnClick({R.id.play_good, R.id.play_evil})
+    protected void onSignInClicked(View view){
         Log.d(TAG, String.format("Login text: %s", signInText.getText()));
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra(MainActivity.KEY_IS_GOOD, goodEvil.isChecked());
+        intent.putExtra(MainActivity.KEY_IS_GOOD, view.getId() == R.id.play_good);
         startActivity(intent);
         finish();
     }
